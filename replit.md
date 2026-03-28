@@ -2,25 +2,67 @@
 
 ## Fish Delivery App
 
-A fully-functional Fish Delivery web app built with Python Flask and SQLite.
+A production-ready Fish Delivery web platform built with Python Flask + SQLite — like a mini Swiggy for fish.
 
 - **Entry point**: `artifacts/fish-delivery/app.py`
 - **Templates**: `artifacts/fish-delivery/templates/`
+- **Static**: `artifacts/fish-delivery/static/` (CSS, JS, image uploads)
 - **Database**: `artifacts/fish-delivery/fish_delivery.db` (auto-created on first run)
 - **Port**: 5000
-- **Workflow**: "Start application"
+- **Workflow**: "Start application" (`cd artifacts/fish-delivery && python3 app.py`)
+
+### Roles & Demo Credentials
+- **Admin**: admin@fish.com / admin123 — full access to all portals
+- **Seller**: register at `/auth/register` with role=seller
+- **Customer**: register at `/auth/register` with role=customer
+- **Delivery Partner**: register at `/auth/register` with role=delivery
 
 ### Routes
-- `/` — Home / landing page
-- `/seller` — Seller portal: add fish, toggle availability, remove fish
-- `/customer` — Customer: browse fish and place orders
-- `/delivery` — Delivery dashboard: view and update all orders
+- `/` — Landing page (stats, how-it-works, role cards)
+- `/auth/login` — Unified login for all roles
+- `/auth/register` — Register with role selector (seller/customer/delivery)
+- `/auth/logout` — Logout
+- `/seller` — Seller dashboard: fish listings, stats, revenue
+- `/seller/add` — Add fish with image upload, price (INR), description
+- `/seller/fish/toggle/<id>` — Toggle In Stock / Out of Stock
+- `/seller/fish/delete/<id>` — Delete fish
+- `/customer` — Browse fish with live search/filter
+- `/customer/order/<id>` — Place order with auto-total calculator (INR)
+- `/customer/confirm/<id>` — Order confirmation with ORD-XXXXX ID
+- `/customer/orders` — Customer order history with status tracking
+- `/delivery/orders` — Delivery partner's assigned orders (filter by status)
+- `/delivery/orders/update/<id>` — Update delivery status
+- `/delivery/admin` — Admin panel: all orders, stats, assign to partners, update status
+
+### Template Structure
+```
+templates/
+├── base.html           — Shared layout, role-aware navbar, flash toasts, loading overlay
+├── index.html          — Landing page
+├── auth/
+│   ├── login.html
+│   └── register.html   — Role selector (seller/customer/delivery)
+├── seller/
+│   ├── dashboard.html  — Fish listings table with stats
+│   └── add_fish.html   — Add fish form with image preview
+├── customer/
+│   ├── browse.html     — Fish grid with live search
+│   ├── order.html      — Order form with auto-total
+│   ├── confirm.html    — Order confirmation with ORD-XXXXX
+│   └── orders.html     — Order history
+└── delivery/
+    ├── my_orders.html  — Partner's orders with status update
+    └── admin.html      — Admin all-orders table with assign + status dropdowns
+```
+
+### Static Assets
+- `static/css/main.css` — Full design system (CSS variables, cards, badges, forms, responsive)
+- `static/js/main.js` — Live search, auto-calculate total, toast dismissal, image preview, confirm-delete
+- `static/uploads/` — Fish images (served by Flask static)
 
 ---
 
-
-
-## Overview
+## Monorepo Overview
 
 pnpm workspace monorepo using TypeScript. Each package manages its own dependencies.
 
@@ -40,77 +82,14 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 
 ```text
 artifacts-monorepo/
-├── artifacts/              # Deployable applications
-│   └── api-server/         # Express API server
+├── artifacts/
+│   ├── api-server/         # Express API server (port 8080, /api)
+│   └── fish-delivery/      # Flask fish delivery app (port 5000, /)
 ├── lib/                    # Shared libraries
 │   ├── api-spec/           # OpenAPI spec + Orval codegen config
 │   ├── api-client-react/   # Generated React Query hooks
 │   ├── api-zod/            # Generated Zod schemas from OpenAPI
 │   └── db/                 # Drizzle ORM schema + DB connection
-├── scripts/                # Utility scripts (single workspace package)
-│   └── src/                # Individual .ts scripts, run via `pnpm --filter @workspace/scripts run <script>`
-├── pnpm-workspace.yaml     # pnpm workspace (artifacts/*, lib/*, lib/integrations/*, scripts)
-├── tsconfig.base.json      # Shared TS options (composite, bundler resolution, es2022)
-├── tsconfig.json           # Root TS project references
-└── package.json            # Root package with hoisted devDeps
+├── pnpm-workspace.yaml
+└── tsconfig.json
 ```
-
-## TypeScript & Composite Projects
-
-Every package extends `tsconfig.base.json` which sets `composite: true`. The root `tsconfig.json` lists all packages as project references. This means:
-
-- **Always typecheck from the root** — run `pnpm run typecheck` (which runs `tsc --build --emitDeclarationOnly`). This builds the full dependency graph so that cross-package imports resolve correctly. Running `tsc` inside a single package will fail if its dependencies haven't been built yet.
-- **`emitDeclarationOnly`** — we only emit `.d.ts` files during typecheck; actual JS bundling is handled by esbuild/tsx/vite...etc, not `tsc`.
-- **Project references** — when package A depends on package B, A's `tsconfig.json` must list B in its `references` array. `tsc --build` uses this to determine build order and skip up-to-date packages.
-
-## Root Scripts
-
-- `pnpm run build` — runs `typecheck` first, then recursively runs `build` in all packages that define it
-- `pnpm run typecheck` — runs `tsc --build --emitDeclarationOnly` using project references
-
-## Packages
-
-### `artifacts/api-server` (`@workspace/api-server`)
-
-Express 5 API server. Routes live in `src/routes/` and use `@workspace/api-zod` for request and response validation and `@workspace/db` for persistence.
-
-- Entry: `src/index.ts` — reads `PORT`, starts Express
-- App setup: `src/app.ts` — mounts CORS, JSON/urlencoded parsing, routes at `/api`
-- Routes: `src/routes/index.ts` mounts sub-routers; `src/routes/health.ts` exposes `GET /health` (full path: `/api/health`)
-- Depends on: `@workspace/db`, `@workspace/api-zod`
-- `pnpm --filter @workspace/api-server run dev` — run the dev server
-- `pnpm --filter @workspace/api-server run build` — production esbuild bundle (`dist/index.cjs`)
-- Build bundles an allowlist of deps (express, cors, pg, drizzle-orm, zod, etc.) and externalizes the rest
-
-### `lib/db` (`@workspace/db`)
-
-Database layer using Drizzle ORM with PostgreSQL. Exports a Drizzle client instance and schema models.
-
-- `src/index.ts` — creates a `Pool` + Drizzle instance, exports schema
-- `src/schema/index.ts` — barrel re-export of all models
-- `src/schema/<modelname>.ts` — table definitions with `drizzle-zod` insert schemas (no models definitions exist right now)
-- `drizzle.config.ts` — Drizzle Kit config (requires `DATABASE_URL`, automatically provided by Replit)
-- Exports: `.` (pool, db, schema), `./schema` (schema only)
-
-Production migrations are handled by Replit when publishing. In development, we just use `pnpm --filter @workspace/db run push`, and we fallback to `pnpm --filter @workspace/db run push-force`.
-
-### `lib/api-spec` (`@workspace/api-spec`)
-
-Owns the OpenAPI 3.1 spec (`openapi.yaml`) and the Orval config (`orval.config.ts`). Running codegen produces output into two sibling packages:
-
-1. `lib/api-client-react/src/generated/` — React Query hooks + fetch client
-2. `lib/api-zod/src/generated/` — Zod schemas
-
-Run codegen: `pnpm --filter @workspace/api-spec run codegen`
-
-### `lib/api-zod` (`@workspace/api-zod`)
-
-Generated Zod schemas from the OpenAPI spec (e.g. `HealthCheckResponse`). Used by `api-server` for response validation.
-
-### `lib/api-client-react` (`@workspace/api-client-react`)
-
-Generated React Query hooks and fetch client from the OpenAPI spec (e.g. `useHealthCheck`, `healthCheck`).
-
-### `scripts` (`@workspace/scripts`)
-
-Utility scripts package. Each script is a `.ts` file in `src/` with a corresponding npm script in `package.json`. Run scripts via `pnpm --filter @workspace/scripts run <script>`. Scripts can import any workspace package (e.g., `@workspace/db`) by adding it as a dependency in `scripts/package.json`.

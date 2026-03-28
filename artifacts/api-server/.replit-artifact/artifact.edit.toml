@@ -35,5 +35,8 @@ localPort = 5000
 name = "Fish Delivery App"
 paths = ["/"]
 
+[services.env]
+PORT = "5000"
+
 [services.development]
 run = "python3 /home/runner/workspace/artifacts/fish-delivery/app.py"

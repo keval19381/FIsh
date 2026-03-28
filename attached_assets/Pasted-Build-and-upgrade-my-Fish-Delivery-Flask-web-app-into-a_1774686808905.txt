@@ -1,0 +1,71 @@
+Build and upgrade my Fish Delivery Flask web app into a production-ready modern platform.
+
+Fix & Setup:
+- Ensure backend runs correctly (fix "Backend Not Configured")
+- Create/update requirements.txt with Flask
+- Create/update .replit file: run = "python app.py"
+- Ensure app runs on host=0.0.0.0 and port=5000
+- Initialize SQLite database automatically
+
+UI/UX Upgrade:
+- Modern responsive UI (mobile-friendly)
+- Clean card-based layout with shadows, rounded corners
+- Blue + white professional theme
+- Add navbar with logo "FishDelivery 🐟"
+- Add icons for Seller, Customer, Delivery
+- Add animations (fade-in, hover effects)
+- Add loading spinner on submit
+- Disable button after click (prevent multiple submits)
+- Toast-style success/error notifications
+
+Currency:
+- Replace "$" with "₹"
+- Show "Price per kg (₹)"
+- Store and display all prices in INR
+
+Core Features:
+- Seller Portal:
+  - Add fish with name, price (₹), and image upload
+  - Show fish image in listings
+  - Toggle availability (In Stock / Out of Stock badge)
+  - Delete fish
+- Customer Portal:
+  - View available fish with images and price
+  - Search/filter fish
+  - Place order (name, address, quantity)
+  - Auto calculate total price (price × quantity)
+  - Show order confirmation with total amount and Order ID
+- Delivery Dashboard:
+  - View all orders with fish, quantity, total price
+  - Update order status:
+    pending → preparing → out_for_delivery → delivered → cancelled
+  - Color-coded status badges
+  - Filter orders by status
+
+Authentication System:
+- Add login/signup for:
+  - Seller
+  - Customer
+  - Delivery Partner
+- Store users in database
+- Restrict access based on roles
+- Add logout functionality
+
+Advanced Features:
+- Assign orders to delivery partners
+- Show assigned orders to each delivery person
+- Add basic location field (city) for users
+- Prepare structure for future map integration
+
+Performance & Smoothness:
+- Optimize page load speed
+- Clean code structure
+- Use reusable components/templates
+- Ensure no page crashes or lag
+
+Keep:
+- Flask + SQLite backend
+- Existing functionality working
+
+Goal:
+Transform this into a real startup-level fish delivery platform (like a mini Swiggy for fish) with smooth UI, INR pricing, authentication, and delivery system.

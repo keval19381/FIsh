@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Browse Fish — FishDelivery{% endblock %}
+{% block content %}
+<div class="container page">
+  <div class="page-header">
+    <div class="page-title">🛒 Fresh Fish Near You</div>
+    <div class="page-subtitle">Order fresh, get it delivered fast — all prices in ₹/kg</div>
+  </div>
+
+  <!-- Search -->
+  <form method="GET" action="{{ url_for('customer_browse') }}" style="display:flex;gap:0.75rem;margin-bottom:1.5rem;">
+    <input type="text" name="q" id="fish-search" class="form-control" placeholder="🔍 Search fish by name..." value="{{ query }}" autocomplete="off"/>
+    {% if query %}
+    <a href="{{ url_for('customer_browse') }}" class="btn btn-ghost">✕ Clear</a>
+    {% else %}
+    <button type="submit" class="btn btn-primary">Search</button>
+    {% endif %}
+  </form>
+
+  {% if query %}
+  <p class="text-muted" style="margin-bottom:1rem;">
+    Results for "<strong>{{ query }}</strong>" — {{ fish_list|length }} fish found
+  </p>
+  {% endif %}
+
+  {% if fish_list %}
+  <div class="fish-grid">
+    {% for fish in fish_list %}
+    <div class="fish-card" data-name="{{ fish.name }}">
+      {% if fish.image_path %}
+        <img class="fish-img" src="{{ url_for('static', filename=fish.image_path) }}" alt="{{ fish.name }}"/>
+      {% else %}
+        <div class="fish-img-placeholder">🐟</div>
+      {% endif %}
+      <div class="fish-body">
+        <div class="fish-name">{{ fish.name }}</div>
+        <div class="fish-price">₹{{ "%.2f"|format(fish.price) }} <span style="font-size:0.7rem;font-weight:500;color:var(--text-muted)">/ kg</span></div>
+        {% if fish.description %}
+        <div class="fish-desc">{{ fish.description[:80] }}{% if fish.description|length > 80 %}...{% endif %}</div>
+        {% endif %}
+        <a href="{{ url_for('customer_order', fish_id=fish.id) }}" class="btn btn-accent btn-sm" style="margin-top:auto;">Order Now →</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div id="no-results" class="empty-state hidden">
+    <div class="icon">🔍</div>
+    <h3>No fish found</h3>
+    <p>Try a different search term</p>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="icon">🐟</div>
+    <h3>No fish available right now</h3>
+    <p>Check back soon — sellers are stocking up!</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

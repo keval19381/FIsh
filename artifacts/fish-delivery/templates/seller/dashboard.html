@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Seller Dashboard — FishDelivery{% endblock %}
+{% block content %}
+<div class="container page">
+  <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+    <div>
+      <div class="page-title">🏪 Seller Dashboard</div>
+      <div class="page-subtitle">Manage your fish listings and track orders</div>
+    </div>
+    <a href="{{ url_for('seller_add_fish') }}" class="btn btn-primary">➕ Add New Fish</a>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num">{{ fish_list|length }}</div>
+      <div class="stat-label">Total Listings</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-num">{{ fish_list|selectattr('available','equalto',1)|list|length }}</div>
+      <div class="stat-label">In Stock</div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-num">{{ total_orders }}</div>
+      <div class="stat-label">Total Orders</div>
+    </div>
+    <div class="stat-card purple">
+      <div class="stat-num">₹{{ "%.0f"|format(revenue) }}</div>
+      <div class="stat-label">Revenue Earned</div>
+    </div>
+  </div>
+
+  <!-- Fish Listings -->
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;">
+      <h2 style="font-size:1rem;font-weight:700;color:var(--primary-dark);">🐟 Your Fish Listings</h2>
+    </div>
+
+    {% if fish_list %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Fish</th>
+            <th>Price / kg</th>
+            <th>Status</th>
+            <th>Added</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for fish in fish_list %}
+          <tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:0.75rem;">
+                {% if fish.image_path %}
+                  <img src="{{ url_for('static', filename=fish.image_path) }}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;" alt="{{ fish.name }}"/>
+                {% else %}
+                  <div style="width:44px;height:44px;border-radius:8px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🐟</div>
+                {% endif %}
+                <div>
+                  <div style="font-weight:700;">{{ fish.name }}</div>
+                  {% if fish.description %}
+                  <div class="text-muted text-sm" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ fish.description }}</div>
+                  {% endif %}
+                </div>
+              </div>
+            </td>
+            <td class="price-tag price-inr">{{ "%.2f"|format(fish.price) }}</td>
+            <td>
+              {% if fish.available %}
+                <span class="badge badge-available">✓ In Stock</span>
+              {% else %}
+                <span class="badge badge-unavailable">✗ Out of Stock</span>
+              {% endif %}
+            </td>
+            <td class="text-muted text-sm">{{ fish.created_at[:10] if fish.created_at else '—' }}</td>
+            <td>
+              <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                <form method="POST" action="{{ url_for('seller_toggle', fish_id=fish.id) }}">
+                  <button type="submit" class="btn btn-warning btn-sm">
+                    {% if fish.available %}🔒 Disable{% else %}✅ Enable{% endif %}
+                  </button>
+                </form>
+                <form method="POST" action="{{ url_for('seller_delete', fish_id=fish.id) }}" class="confirm-delete" data-name="{{ fish.name }}">
+                  <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="icon">🐟</div>
+      <h3>No fish listed yet</h3>
+      <p>Add your first fish to start selling</p>
+      <a href="{{ url_for('seller_add_fish') }}" class="btn btn-primary" style="margin-top:1rem;">➕ Add Fish</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

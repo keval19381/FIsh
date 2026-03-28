@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Add Fish — FishDelivery{% endblock %}
+{% block content %}
+<div class="container page">
+  <div class="page-header">
+    <div class="page-title">🐟 Add New Fish</div>
+    <div class="page-subtitle">List a new fish for customers to order</div>
+  </div>
+
+  <div style="max-width:560px;">
+    <div class="card card-lg">
+      <form method="POST" action="{{ url_for('seller_add_fish') }}" enctype="multipart/form-data" class="with-loading">
+        <div class="form-group">
+          <label class="form-label" for="name">Fish Name *</label>
+          <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Atlantic Salmon, Rohu, Pomfret" required autofocus/>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="price">Price per kg (₹) *</label>
+            <input type="number" id="price" name="price" class="form-control" placeholder="e.g. 450" step="0.01" min="1" required/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="description">Description</label>
+          <textarea id="description" name="description" class="form-control" placeholder="Describe the fish — freshness, origin, best use..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="fish-image-input">Fish Image (optional)</label>
+          <input type="file" id="fish-image-input" name="image" class="form-control" accept="image/*"/>
+          <div class="form-hint">JPG, PNG or WebP — max 5 MB</div>
+          <img id="fish-image-preview" src="" alt="Preview" style="display:none;margin-top:0.75rem;max-height:180px;border-radius:var(--radius-sm);object-fit:cover;"/>
+        </div>
+
+        <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+          <button type="submit" class="btn btn-primary btn-lg" style="flex:1;">➕ Add Fish Listing</button>
+          <a href="{{ url_for('seller_dashboard') }}" class="btn btn-ghost btn-lg">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

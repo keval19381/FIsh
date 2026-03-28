@@ -1,66 +1,96 @@
 {% extends "base.html" %}
-{% block title %}Fish Delivery - Home{% endblock %}
+{% block title %}FishDelivery — Fresh Fish at Your Door{% endblock %}
 {% block content %}
 
-<div style="text-align: center; padding: 2.5rem 1rem 1.5rem;">
-    <div style="font-size: 4rem; margin-bottom: 0.75rem;">🐟</div>
-    <h1 style="border: none; font-size: 2.2rem; color: #1a365d;">Fresh Fish, Right to Your Door</h1>
-    <p style="font-size: 1.1rem; color: #718096; margin: 0.75rem auto 2rem; max-width: 500px;">
-        Order the freshest fish from local sellers and get it delivered straight to your home.
-    </p>
+<!-- Hero -->
+<div style="background:linear-gradient(135deg,#0D47A1 0%,#1976D2 60%,#42A5F5 100%);padding:4rem 1.5rem 3rem;text-align:center;color:#fff;">
+  <div style="font-size:4rem;margin-bottom:1rem;">🐟</div>
+  <h1 style="font-size:2.4rem;font-weight:900;letter-spacing:-0.5px;margin-bottom:0.75rem;">Fresh Fish, Right to Your Door</h1>
+  <p style="font-size:1.1rem;opacity:0.88;max-width:520px;margin:0 auto 2rem;">Order the freshest catch from local sellers and get it delivered fast — like a mini Swiggy for seafood.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    {% if session.user_id %}
+      <a href="{{ url_for('role_home') }}" class="btn btn-accent btn-lg">Go to Dashboard →</a>
+    {% else %}
+      <a href="{{ url_for('register') }}" class="btn btn-accent btn-lg">Get Started Free</a>
+      <a href="{{ url_for('login') }}" class="btn btn-outline btn-lg" style="border-color:#fff;color:#fff;">Log In</a>
+    {% endif %}
+  </div>
 </div>
 
-<div class="row" style="justify-content: center;">
-    <div class="col" style="max-width: 240px;">
-        <a href="/seller" style="text-decoration: none;">
-            <div class="card" style="text-align: center; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 2px solid transparent;"
-                 onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)'; this.style.borderColor='#3182ce';"
-                 onmouseout="this.style.transform=''; this.style.boxShadow=''; this.style.borderColor='transparent';">
-                <div style="font-size: 2.2rem; margin-bottom: 0.6rem;">🏪</div>
-                <h2 style="color: #1a365d;">Seller Portal</h2>
-                <p style="color: #718096; font-size: 0.9rem; margin-top: 0.4rem;">Add and manage fish listings</p>
-            </div>
-        </a>
+<!-- Stats bar -->
+<div style="background:#fff;border-bottom:1px solid var(--border);padding:1.25rem 1.5rem;">
+  <div class="container" style="display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;">
+    <div style="text-align:center;">
+      <div style="font-size:1.6rem;font-weight:900;color:var(--primary);">{{ fish_count }}+</div>
+      <div style="font-size:0.8rem;color:var(--text-muted);font-weight:500;">Fish Listed</div>
     </div>
-
-    <div class="col" style="max-width: 240px;">
-        <a href="/customer" style="text-decoration: none;">
-            <div class="card" style="text-align: center; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 2px solid transparent;"
-                 onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)'; this.style.borderColor='#38a169';"
-                 onmouseout="this.style.transform=''; this.style.boxShadow=''; this.style.borderColor='transparent';">
-                <div style="font-size: 2.2rem; margin-bottom: 0.6rem;">🛒</div>
-                <h2 style="color: #1a365d;">Order Fish</h2>
-                <p style="color: #718096; font-size: 0.9rem; margin-top: 0.4rem;">Browse and place your order</p>
-            </div>
-        </a>
+    <div style="text-align:center;">
+      <div style="font-size:1.6rem;font-weight:900;color:var(--success);">{{ order_count }}+</div>
+      <div style="font-size:0.8rem;color:var(--text-muted);font-weight:500;">Orders Placed</div>
     </div>
-
-    <div class="col" style="max-width: 240px;">
-        <a href="/delivery/login" style="text-decoration: none;">
-            <div class="card" style="text-align: center; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 2px solid transparent;"
-                 onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)'; this.style.borderColor='#d69e2e';"
-                 onmouseout="this.style.transform=''; this.style.boxShadow=''; this.style.borderColor='transparent';">
-                <div style="font-size: 2.2rem; margin-bottom: 0.6rem;">🚚</div>
-                <h2 style="color: #1a365d;">Delivery Portal</h2>
-                <p style="color: #718096; font-size: 0.9rem; margin-top: 0.4rem;">Login to manage deliveries</p>
-            </div>
-        </a>
+    <div style="text-align:center;">
+      <div style="font-size:1.6rem;font-weight:900;color:var(--accent);">{{ seller_count }}+</div>
+      <div style="font-size:0.8rem;color:var(--text-muted);font-weight:500;">Local Sellers</div>
     </div>
+  </div>
 </div>
 
-<div class="card" style="margin-top: 1rem; background: linear-gradient(135deg,#ebf4ff,#e9d8fd); border: none;">
-    <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-        <div style="font-size: 1.5rem;">🔑</div>
-        <div>
-            <strong style="color: #1a365d;">Delivery Partner?</strong>
-            <p style="color: #4a5568; font-size: 0.9rem; margin-top: 0.2rem;">
-                Log in to see your assigned orders, or
-                <a href="/delivery/register" style="color: #3182ce; font-weight: 600;">register here</a>
-                if you're new.
-                &nbsp;|&nbsp; Admin login: <code style="background: #e2e8f0; padding: 1px 5px; border-radius: 4px;">admin / admin123</code>
-            </p>
-        </div>
-    </div>
-</div>
+<!-- How it works -->
+<div class="container page">
+  <div style="text-align:center;margin-bottom:2rem;">
+    <h2 style="font-size:1.6rem;font-weight:800;color:var(--primary-dark);">How It Works</h2>
+    <p class="text-muted">Three simple steps to fresh fish</p>
+  </div>
 
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-bottom:3rem;">
+    <div class="card" style="text-align:center;border-top:4px solid var(--primary);">
+      <div style="font-size:2.5rem;margin-bottom:0.75rem;">🛒</div>
+      <h3 style="font-weight:700;margin-bottom:0.5rem;">Browse & Order</h3>
+      <p class="text-muted" style="font-size:0.88rem;">Pick from fresh fish listings, choose quantity, and place your order in seconds.</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:4px solid var(--success);">
+      <div style="font-size:2.5rem;margin-bottom:0.75rem;">🔪</div>
+      <h3 style="font-weight:700;margin-bottom:0.5rem;">Seller Prepares</h3>
+      <p class="text-muted" style="font-size:0.88rem;">Your local seller freshly packs your fish and hands it to the delivery partner.</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:4px solid var(--accent);">
+      <div style="font-size:2.5rem;margin-bottom:0.75rem;">🚚</div>
+      <h3 style="font-weight:700;margin-bottom:0.5rem;">Fast Delivery</h3>
+      <p class="text-muted" style="font-size:0.88rem;">Dedicated delivery partners bring your order right to your address.</p>
+    </div>
+  </div>
+
+  <!-- Role cards -->
+  <h2 style="font-size:1.4rem;font-weight:800;color:var(--primary-dark);text-align:center;margin-bottom:1.5rem;">Join as</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem;">
+    <a href="{{ url_for('register') }}?role=seller" style="text-decoration:none;">
+      <div class="card" style="text-align:center;cursor:pointer;transition:all 0.2s;border:2px solid transparent;" onmouseover="this.style.borderColor='#1565C0';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='transparent';this.style.transform=''">
+        <div style="font-size:2.2rem;margin-bottom:0.6rem;">🏪</div>
+        <div style="font-weight:800;font-size:1rem;color:var(--primary-dark);">Seller</div>
+        <div class="text-muted" style="font-size:0.82rem;margin-top:0.3rem;">List your fish, manage inventory, earn revenue</div>
+      </div>
+    </a>
+    <a href="{{ url_for('register') }}?role=customer" style="text-decoration:none;">
+      <div class="card" style="text-align:center;cursor:pointer;transition:all 0.2s;border:2px solid transparent;" onmouseover="this.style.borderColor='var(--success)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='transparent';this.style.transform=''">
+        <div style="font-size:2.2rem;margin-bottom:0.6rem;">👤</div>
+        <div style="font-weight:800;font-size:1rem;color:var(--primary-dark);">Customer</div>
+        <div class="text-muted" style="font-size:0.82rem;margin-top:0.3rem;">Browse fresh fish, place orders, track delivery</div>
+      </div>
+    </a>
+    <a href="{{ url_for('register') }}?role=delivery" style="text-decoration:none;">
+      <div class="card" style="text-align:center;cursor:pointer;transition:all 0.2s;border:2px solid transparent;" onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='transparent';this.style.transform=''">
+        <div style="font-size:2.2rem;margin-bottom:0.6rem;">🚚</div>
+        <div style="font-weight:800;font-size:1rem;color:var(--primary-dark);">Delivery Partner</div>
+        <div class="text-muted" style="font-size:0.82rem;margin-top:0.3rem;">Deliver orders, earn on every successful delivery</div>
+      </div>
+    </a>
+  </div>
+
+  {% if not session.user_id %}
+  <div style="margin-top:2rem;padding:1.5rem;background:linear-gradient(135deg,#E3F2FD,#E8EAF6);border-radius:var(--radius);text-align:center;">
+    <p style="font-weight:600;color:var(--primary-dark);margin-bottom:0.5rem;">Admin demo: <code style="background:#fff;padding:2px 8px;border-radius:4px;font-size:0.85rem;">admin@fish.com</code> / <code style="background:#fff;padding:2px 8px;border-radius:4px;font-size:0.85rem;">admin123</code></p>
+    <p class="text-muted" style="font-size:0.82rem;">Full access to all portals and admin panel</p>
+  </div>
+  {% endif %}
+</div>
 {% endblock %}
