@@ -1,5 +1,25 @@
 # Workspace
 
+## Fish Delivery App
+
+A fully-functional Fish Delivery web app built with Python Flask and SQLite.
+
+- **Entry point**: `artifacts/fish-delivery/app.py`
+- **Templates**: `artifacts/fish-delivery/templates/`
+- **Database**: `artifacts/fish-delivery/fish_delivery.db` (auto-created on first run)
+- **Port**: 5000
+- **Workflow**: "Start application"
+
+### Routes
+- `/` — Home / landing page
+- `/seller` — Seller portal: add fish, toggle availability, remove fish
+- `/customer` — Customer: browse fish and place orders
+- `/delivery` — Delivery dashboard: view and update all orders
+
+---
+
+
+
 ## Overview
 
 pnpm workspace monorepo using TypeScript. Each package manages its own dependencies.

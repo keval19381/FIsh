@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Fish Delivery{% endblock %}</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            color: #2d3748;
+            min-height: 100vh;
+        }
+
+        nav {
+            background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            height: 64px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        nav .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-right: 2rem;
+        }
+
+        nav .links {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        nav a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        nav a:hover, nav a.active {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a365d;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid #3182ce;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2b6cb0;
+            margin-bottom: 1rem;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+            color: #4a5568;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.65rem 0.9rem;
+            border: 1.5px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #f7fafc;
+            color: #2d3748;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49,130,206,0.15);
+            background: #fff;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.6rem 1.4rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.15s, transform 0.1s;
+            text-decoration: none;
+        }
+
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+
+        .btn-primary { background: #3182ce; color: #fff; }
+        .btn-success { background: #38a169; color: #fff; }
+        .btn-warning { background: #d69e2e; color: #fff; }
+        .btn-danger  { background: #e53e3e; color: #fff; }
+        .btn-ghost   { background: #e2e8f0; color: #4a5568; }
+        .btn-sm      { padding: 0.35rem 0.8rem; font-size: 0.82rem; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: #ebf4ff;
+            color: #2b6cb0;
+            font-weight: 700;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 2px solid #bee3f8;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: middle;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #f7fafc; }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-available   { background: #c6f6d5; color: #276749; }
+        .badge-unavailable { background: #fed7d7; color: #9b2c2c; }
+        .badge-pending     { background: #fefcbf; color: #744210; }
+        .badge-preparing   { background: #bee3f8; color: #2c5282; }
+        .badge-out_for_delivery { background: #e9d8fd; color: #553c9a; }
+        .badge-delivered   { background: #c6f6d5; color: #276749; }
+        .badge-cancelled   { background: #fed7d7; color: #9b2c2c; }
+
+        .alert {
+            padding: 0.9rem 1.2rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .alert-success { background: #c6f6d5; color: #276749; border-left: 4px solid #38a169; }
+        .alert-error   { background: #fed7d7; color: #9b2c2c; border-left: 4px solid #e53e3e; }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #a0aec0;
+        }
+
+        .empty-state .icon { font-size: 3rem; margin-bottom: 0.75rem; }
+        .empty-state p { font-size: 1.1rem; }
+
+        .row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        .col { flex: 1; min-width: 280px; }
+
+        .price-tag {
+            font-weight: 700;
+            color: #2b6cb0;
+        }
+
+        select { cursor: pointer; }
+
+        .form-row { display: flex; gap: 1rem; }
+        .form-row .form-group { flex: 1; }
+
+        @media (max-width: 640px) {
+            nav { padding: 0 1rem; }
+            .container { padding: 0 1rem; margin: 1rem auto; }
+            .form-row { flex-direction: column; }
+            .row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/" class="brand">🐟 FishDelivery</a>
+        <div class="links">
+            <a href="/seller" {% if request.path.startswith('/seller') %}class="active"{% endif %}>Seller</a>
+            <a href="/customer" {% if request.path.startswith('/customer') %}class="active"{% endif %}>Customer</a>
+            <a href="/delivery" {% if request.path.startswith('/delivery') %}class="active"{% endif %}>Delivery</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

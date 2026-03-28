@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Delivery Dashboard - Fish Delivery{% endblock %}
+{% block content %}
+
+<h1>🚚 Delivery Dashboard</h1>
+
+<div class="card">
+    {% if orders %}
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2 style="margin-bottom: 0;">All Orders ({{ orders|length }})</h2>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <span class="badge badge-pending">Pending</span>
+                <span class="badge badge-preparing">Preparing</span>
+                <span class="badge badge-out_for_delivery">Out for Delivery</span>
+                <span class="badge badge-delivered">Delivered</span>
+                <span class="badge badge-cancelled">Cancelled</span>
+            </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Customer</th>
+                        <th>Address</th>
+                        <th>Fish</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Time</th>
+                        <th>Update</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td style="color: #a0aec0;">{{ order.id }}</td>
+                        <td><strong>{{ order.customer_name }}</strong></td>
+                        <td style="font-size: 0.9rem; color: #718096;">{{ order.customer_address }}</td>
+                        <td>{{ order.fish_name }}</td>
+                        <td>{{ order.quantity }} kg</td>
+                        <td class="price-tag">${{ "%.2f"|format(order.fish_price * order.quantity) }}</td>
+                        <td>
+                            <span class="badge badge-{{ order.status }}">
+                                {% if order.status == 'pending' %}⏳ Pending
+                                {% elif order.status == 'preparing' %}🔪 Preparing
+                                {% elif order.status == 'out_for_delivery' %}🚚 Out for Delivery
+                                {% elif order.status == 'delivered' %}✅ Delivered
+                                {% elif order.status == 'cancelled' %}❌ Cancelled
+                                {% else %}{{ order.status }}{% endif %}
+                            </span>
+                        </td>
+                        <td style="font-size: 0.85rem; color: #a0aec0; white-space: nowrap;">{{ order.created_at[:16] if order.created_at else '' }}</td>
+                        <td>
+                            <form method="POST" action="/delivery/update/{{ order.id }}" style="display: flex; gap: 0.4rem; align-items: center;">
+                                <select name="status" style="padding: 0.3rem 0.5rem; font-size: 0.82rem; min-width: 130px;">
+                                    <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>⏳ Pending</option>
+                                    <option value="preparing" {% if order.status == 'preparing' %}selected{% endif %}>🔪 Preparing</option>
+                                    <option value="out_for_delivery" {% if order.status == 'out_for_delivery' %}selected{% endif %}>🚚 Out for Delivery</option>
+                                    <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>✅ Delivered</option>
+                                    <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>❌ Cancelled</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="icon">📦</div>
+            <p>No orders yet. Waiting for customers to place orders.</p>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
