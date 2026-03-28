@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Register as Delivery Partner - Fish Delivery{% endblock %}
+{% block content %}
+
+<div class="auth-card">
+    <div class="card">
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <div style="font-size: 2.5rem;">📝</div>
+            <h1 style="border: none; font-size: 1.6rem; margin-top: 0.5rem;">Join as Delivery Partner</h1>
+            <p style="color: #718096; font-size: 0.9rem; margin-top: 0.25rem;">Create your delivery account</p>
+        </div>
+
+        <form method="POST" action="/delivery/register">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="John Doe" required />
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Choose a unique username" required />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Choose a strong password" required />
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number <span style="color:#a0aec0;">(optional)</span></label>
+                <input type="tel" id="phone" name="phone" placeholder="+1 234 567 8900" />
+            </div>
+            <button type="submit" class="btn btn-success" style="width: 100%; justify-content: center; padding: 0.75rem;">
+                Create Account
+            </button>
+        </form>
+
+        <div class="divider">— already have an account? —</div>
+
+        <div style="text-align: center;">
+            <a href="/delivery/login" class="btn btn-ghost btn-sm">Back to Login</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

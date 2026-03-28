@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Delivery Partner Login - Fish Delivery{% endblock %}
+{% block content %}
+
+<div class="auth-card">
+    <div class="card">
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <div style="font-size: 2.5rem;">🚚</div>
+            <h1 style="border: none; font-size: 1.6rem; margin-top: 0.5rem;">Delivery Partner Login</h1>
+            <p style="color: #718096; font-size: 0.9rem; margin-top: 0.25rem;">Sign in to manage your deliveries</p>
+        </div>
+
+        <form method="POST" action="/delivery/login">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required autofocus />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required />
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">
+                Login →
+            </button>
+        </form>
+
+        <div class="divider">— or —</div>
+
+        <div style="text-align: center;">
+            <p style="color: #718096; font-size: 0.9rem;">New delivery partner?</p>
+            <a href="/delivery/register" class="btn btn-ghost btn-sm" style="margin-top: 0.5rem;">Create Account</a>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 1rem; padding: 1rem; background: #ebf4ff; border-radius: 8px; font-size: 0.88rem; color: #2b6cb0;">
+        <strong>Admin credentials:</strong> username: <code>admin</code> / password: <code>admin123</code>
+    </div>
+</div>
+
+{% endblock %}

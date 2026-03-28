@@ -20,7 +20,7 @@
                 <tbody>
                     {% for fish in fish_list %}
                     <tr>
-                        <td style="color: #a0aec0;">{{ fish.id }}</td>
+                        <td style="color: #a0aec0; font-size: 0.85rem;">{{ fish.id }}</td>
                         <td><strong>{{ fish.name }}</strong></td>
                         <td class="price-tag">${{ "%.2f"|format(fish.price) }}</td>
                     </tr>
@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <label for="fish_id">Select Fish</label>
                     <select id="fish_id" name="fish_id" required>
-                        <option value="">-- Choose a fish --</option>
+                        <option value="">— Choose a fish —</option>
                         {% for fish in fish_list %}
                         <option value="{{ fish.id }}">{{ fish.name }} — ${{ "%.2f"|format(fish.price) }}/kg</option>
                         {% endfor %}
@@ -55,7 +55,7 @@
                     <label for="quantity">Quantity (kg)</label>
                     <input type="number" id="quantity" name="quantity" value="1" min="1" step="1" required />
                 </div>
-                <button type="submit" class="btn btn-success">🛒 Place Order</button>
+                <button type="submit" class="btn btn-success" style="width: 100%; justify-content: center;">🛒 Place Order</button>
             </form>
         </div>
     </div>

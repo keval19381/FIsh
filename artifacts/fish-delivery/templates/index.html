@@ -2,55 +2,64 @@
 {% block title %}Fish Delivery - Home{% endblock %}
 {% block content %}
 
-<div style="text-align: center; padding: 3rem 1rem;">
-    <div style="font-size: 4rem; margin-bottom: 1rem;">🐟</div>
-    <h1 style="border: none; font-size: 2.5rem; color: #1a365d;">Fresh Fish, Right to Your Door</h1>
-    <p style="font-size: 1.15rem; color: #718096; margin-bottom: 2.5rem; max-width: 500px; margin-left: auto; margin-right: auto;">
+<div style="text-align: center; padding: 2.5rem 1rem 1.5rem;">
+    <div style="font-size: 4rem; margin-bottom: 0.75rem;">🐟</div>
+    <h1 style="border: none; font-size: 2.2rem; color: #1a365d;">Fresh Fish, Right to Your Door</h1>
+    <p style="font-size: 1.1rem; color: #718096; margin: 0.75rem auto 2rem; max-width: 500px;">
         Order the freshest fish from local sellers and get it delivered straight to your home.
     </p>
 </div>
 
 <div class="row" style="justify-content: center;">
-    <div class="col" style="max-width: 280px;">
+    <div class="col" style="max-width: 240px;">
         <a href="/seller" style="text-decoration: none;">
             <div class="card" style="text-align: center; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 2px solid transparent;"
                  onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)'; this.style.borderColor='#3182ce';"
                  onmouseout="this.style.transform=''; this.style.boxShadow=''; this.style.borderColor='transparent';">
-                <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🏪</div>
+                <div style="font-size: 2.2rem; margin-bottom: 0.6rem;">🏪</div>
                 <h2 style="color: #1a365d;">Seller Portal</h2>
-                <p style="color: #718096; font-size: 0.95rem; margin-top: 0.5rem;">
-                    Add and manage your fish listings
-                </p>
+                <p style="color: #718096; font-size: 0.9rem; margin-top: 0.4rem;">Add and manage fish listings</p>
             </div>
         </a>
     </div>
 
-    <div class="col" style="max-width: 280px;">
+    <div class="col" style="max-width: 240px;">
         <a href="/customer" style="text-decoration: none;">
             <div class="card" style="text-align: center; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 2px solid transparent;"
                  onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)'; this.style.borderColor='#38a169';"
                  onmouseout="this.style.transform=''; this.style.boxShadow=''; this.style.borderColor='transparent';">
-                <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🛒</div>
+                <div style="font-size: 2.2rem; margin-bottom: 0.6rem;">🛒</div>
                 <h2 style="color: #1a365d;">Order Fish</h2>
-                <p style="color: #718096; font-size: 0.95rem; margin-top: 0.5rem;">
-                    Browse and place your order
-                </p>
+                <p style="color: #718096; font-size: 0.9rem; margin-top: 0.4rem;">Browse and place your order</p>
             </div>
         </a>
     </div>
 
-    <div class="col" style="max-width: 280px;">
-        <a href="/delivery" style="text-decoration: none;">
+    <div class="col" style="max-width: 240px;">
+        <a href="/delivery/login" style="text-decoration: none;">
             <div class="card" style="text-align: center; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 2px solid transparent;"
                  onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)'; this.style.borderColor='#d69e2e';"
                  onmouseout="this.style.transform=''; this.style.boxShadow=''; this.style.borderColor='transparent';">
-                <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🚚</div>
-                <h2 style="color: #1a365d;">Delivery Dashboard</h2>
-                <p style="color: #718096; font-size: 0.95rem; margin-top: 0.5rem;">
-                    View and manage all orders
-                </p>
+                <div style="font-size: 2.2rem; margin-bottom: 0.6rem;">🚚</div>
+                <h2 style="color: #1a365d;">Delivery Portal</h2>
+                <p style="color: #718096; font-size: 0.9rem; margin-top: 0.4rem;">Login to manage deliveries</p>
             </div>
         </a>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 1rem; background: linear-gradient(135deg,#ebf4ff,#e9d8fd); border: none;">
+    <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <div style="font-size: 1.5rem;">🔑</div>
+        <div>
+            <strong style="color: #1a365d;">Delivery Partner?</strong>
+            <p style="color: #4a5568; font-size: 0.9rem; margin-top: 0.2rem;">
+                Log in to see your assigned orders, or
+                <a href="/delivery/register" style="color: #3182ce; font-weight: 600;">register here</a>
+                if you're new.
+                &nbsp;|&nbsp; Admin login: <code style="background: #e2e8f0; padding: 1px 5px; border-radius: 4px;">admin / admin123</code>
+            </p>
+        </div>
     </div>
 </div>
 

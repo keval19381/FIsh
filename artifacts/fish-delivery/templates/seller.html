@@ -24,7 +24,7 @@
 
     <div class="col" style="flex: 2;">
         <div class="card">
-            <h2>Your Fish Listings</h2>
+            <h2>Fish Listings ({{ fish_list|length }})</h2>
             {% if fish_list %}
                 <table>
                     <thead>
@@ -39,14 +39,14 @@
                     <tbody>
                         {% for fish in fish_list %}
                         <tr>
-                            <td style="color: #a0aec0;">{{ fish.id }}</td>
+                            <td style="color: #a0aec0; font-size: 0.85rem;">{{ fish.id }}</td>
                             <td><strong>{{ fish.name }}</strong></td>
                             <td class="price-tag">${{ "%.2f"|format(fish.price) }}</td>
                             <td>
                                 {% if fish.available %}
-                                    <span class="badge badge-available">Available</span>
+                                    <span class="badge badge-available">✓ Available</span>
                                 {% else %}
-                                    <span class="badge badge-unavailable">Unavailable</span>
+                                    <span class="badge badge-unavailable">✗ Unavailable</span>
                                 {% endif %}
                             </td>
                             <td>
