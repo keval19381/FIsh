@@ -4,8 +4,16 @@ import sqlite3
 import uuid
 from functools import wraps
 from datetime import datetime
-from flask import (Flask, render_template, request, redirect,
-                   url_for, flash, session, jsonify)
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    session,
+    jsonify,
+)
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -89,16 +97,20 @@ def init_db():
         )
     """)
 
-    c.execute("""
+    c.execute(
+        """
         INSERT OR IGNORE INTO users (name, email, password_hash, role, city)
         VALUES ('Admin', 'admin@fish.com', ?, 'admin', 'Mumbai')
-    """, (hash_password("admin123"),))
+    """,
+        (hash_password("admin123"),),
+    )
 
     conn.commit()
     conn.close()
 
 
 # ── Decorators ─────────────────────────────────────────────────────────────
+
 
 def login_required(f):
     @wraps(f)
@@ -107,6 +119,7 @@ def login_required(f):
             flash("Please log in to continue.", "error")
             return redirect(url_for("login"))
         return f(*args, **kwargs)
+
     return decorated
 
 
@@ -121,26 +134,36 @@ def role_required(*roles):
                 flash("You don't have permission to access this page.", "error")
                 return redirect(url_for("index"))
             return f(*args, **kwargs)
+
         return decorated
+
     return decorator
 
 
 # ── Home ────────────────────────────────────────────────────────────────────
 
+
 @app.route("/")
 def index():
     conn = get_db()
-    fish_count = conn.execute("SELECT COUNT(*) FROM fish WHERE available=1").fetchone()[0]
+    fish_count = conn.execute("SELECT COUNT(*) FROM fish WHERE available=1").fetchone()[
+        0
+    ]
     order_count = conn.execute("SELECT COUNT(*) FROM orders").fetchone()[0]
-    seller_count = conn.execute("SELECT COUNT(*) FROM users WHERE role='seller'").fetchone()[0]
+    seller_count = conn.execute(
+        "SELECT COUNT(*) FROM users WHERE role='seller'"
+    ).fetchone()[0]
     conn.close()
-    return render_template("index.html",
-                           fish_count=fish_count,
-                           order_count=order_count,
-                           seller_count=seller_count)
+    return render_template(
+        "index.html",
+        fish_count=fish_count,
+        order_count=order_count,
+        seller_count=seller_count,
+    )
 
 
 # ── Auth ─────────────────────────────────────────────────────────────────────
+
 
 @app.route("/auth/login", methods=["GET", "POST"])
 def login():
@@ -155,7 +178,7 @@ def login():
             conn = get_db()
             user = conn.execute(
                 "SELECT * FROM users WHERE email=? AND password_hash=?",
-                (email, hash_password(password))
+                (email, hash_password(password)),
             ).fetchone()
             conn.close()
             if user:
@@ -191,7 +214,7 @@ def register():
                 conn = get_db()
                 conn.execute(
                     "INSERT INTO users (name, email, password_hash, role, city) VALUES (?,?,?,?,?)",
-                    (name, email, hash_password(password), role, city)
+                    (name, email, hash_password(password), role, city),
                 )
                 conn.commit()
                 conn.close()
@@ -218,35 +241,45 @@ def role_home():
     elif role == "customer":
         return redirect(url_for("customer_browse"))
     elif role in ("delivery", "admin"):
-        return redirect(url_for("delivery_admin" if role == "admin" else "delivery_orders"))
+        return redirect(
+            url_for("delivery_admin" if role == "admin" else "delivery_orders")
+        )
     return redirect(url_for("index"))
 
 
 # ── Seller ───────────────────────────────────────────────────────────────────
 
+
 @app.route("/seller")
 @role_required("seller", "admin")
 def seller_dashboard():
     conn = get_db()
-    fish_list = conn.execute(
-        "SELECT * FROM fish WHERE seller_id=? ORDER BY id DESC",
-        (session["user_id"],)
-    ).fetchall() if session["user_role"] == "seller" else \
-        conn.execute("SELECT f.*, u.name as seller_name FROM fish f JOIN users u ON f.seller_id=u.id ORDER BY f.id DESC").fetchall()
+    fish_list = (
+        conn.execute(
+            "SELECT * FROM fish WHERE seller_id=? ORDER BY id DESC",
+            (session["user_id"],),
+        ).fetchall()
+        if session["user_role"] == "seller"
+        else conn.execute(
+            "SELECT f.*, u.name as seller_name FROM fish f JOIN users u ON f.seller_id=u.id ORDER BY f.id DESC"
+        ).fetchall()
+    )
 
     total_orders = conn.execute(
         "SELECT COUNT(*) FROM orders o JOIN fish f ON o.fish_id=f.id WHERE f.seller_id=?",
-        (session["user_id"],)
+        (session["user_id"],),
     ).fetchone()[0]
     revenue = conn.execute(
         "SELECT COALESCE(SUM(o.total_price),0) FROM orders o JOIN fish f ON o.fish_id=f.id WHERE f.seller_id=? AND o.status='delivered'",
-        (session["user_id"],)
+        (session["user_id"],),
     ).fetchone()[0]
     conn.close()
-    return render_template("seller/dashboard.html",
-                           fish_list=fish_list,
-                           total_orders=total_orders,
-                           revenue=revenue)
+    return render_template(
+        "seller/dashboard.html",
+        fish_list=fish_list,
+        total_orders=total_orders,
+        revenue=revenue,
+    )
 
 
 @app.route("/seller/add", methods=["GET", "POST"])
@@ -280,7 +313,7 @@ def seller_add_fish():
         conn = get_db()
         conn.execute(
             "INSERT INTO fish (seller_id, name, price, image_path, description) VALUES (?,?,?,?,?)",
-            (session["user_id"], name, price_val, image_path, description)
+            (session["user_id"], name, price_val, image_path, description),
         )
         conn.commit()
         conn.close()
@@ -296,8 +329,10 @@ def seller_toggle(fish_id):
     conn = get_db()
     fish = conn.execute("SELECT * FROM fish WHERE id=?", (fish_id,)).fetchone()
     if fish:
-        conn.execute("UPDATE fish SET available=? WHERE id=?",
-                     (0 if fish["available"] else 1, fish_id))
+        conn.execute(
+            "UPDATE fish SET available=? WHERE id=?",
+            (0 if fish["available"] else 1, fish_id),
+        )
         conn.commit()
     conn.close()
     flash("Availability updated.", "success")
@@ -322,6 +357,7 @@ def seller_delete(fish_id):
 
 # ── Customer ─────────────────────────────────────────────────────────────────
 
+
 @app.route("/customer")
 @role_required("customer", "admin")
 def customer_browse():
@@ -330,7 +366,7 @@ def customer_browse():
     if query:
         fish_list = conn.execute(
             "SELECT * FROM fish WHERE available=1 AND name LIKE ? ORDER BY name",
-            (f"%{query}%",)
+            (f"%{query}%",),
         ).fetchall()
     else:
         fish_list = conn.execute(
@@ -344,7 +380,9 @@ def customer_browse():
 @role_required("customer", "admin")
 def customer_order(fish_id):
     conn = get_db()
-    fish = conn.execute("SELECT * FROM fish WHERE id=? AND available=1", (fish_id,)).fetchone()
+    fish = conn.execute(
+        "SELECT * FROM fish WHERE id=? AND available=1", (fish_id,)
+    ).fetchone()
     if not fish:
         flash("This fish is no longer available.", "error")
         conn.close()
@@ -371,7 +409,7 @@ def customer_order(fish_id):
         order_num = gen_order_number()
         conn.execute(
             "INSERT INTO orders (order_number, customer_id, fish_id, quantity, total_price, delivery_address, delivery_city) VALUES (?,?,?,?,?,?,?)",
-            (order_num, session["user_id"], fish_id, qty, total, address, city)
+            (order_num, session["user_id"], fish_id, qty, total, address, city),
         )
         conn.commit()
         order_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
@@ -387,11 +425,14 @@ def customer_order(fish_id):
 @role_required("customer", "admin")
 def customer_confirm(order_id):
     conn = get_db()
-    order = conn.execute("""
+    order = conn.execute(
+        """
         SELECT o.*, f.name as fish_name, f.price as fish_price, f.image_path
         FROM orders o JOIN fish f ON o.fish_id=f.id
         WHERE o.id=? AND o.customer_id=?
-    """, (order_id, session["user_id"])).fetchone()
+    """,
+        (order_id, session["user_id"]),
+    ).fetchone()
     conn.close()
     if not order:
         return redirect(url_for("customer_browse"))
@@ -402,7 +443,8 @@ def customer_confirm(order_id):
 @role_required("customer", "admin")
 def customer_orders():
     conn = get_db()
-    orders = conn.execute("""
+    orders = conn.execute(
+        """
         SELECT o.*, f.name as fish_name, f.image_path,
                u.name as partner_name
         FROM orders o
@@ -410,12 +452,15 @@ def customer_orders():
         LEFT JOIN users u ON o.assigned_to=u.id
         WHERE o.customer_id=?
         ORDER BY o.created_at DESC
-    """, (session["user_id"],)).fetchall()
+    """,
+        (session["user_id"],),
+    ).fetchall()
     conn.close()
     return render_template("customer/orders.html", orders=orders)
 
 
 # ── Delivery ─────────────────────────────────────────────────────────────────
+
 
 @app.route("/delivery")
 @login_required
@@ -443,15 +488,18 @@ def delivery_orders():
         WHERE o.assigned_to=?
     """
     if status_filter != "all":
-        orders = conn.execute(base_q + " AND o.status=? ORDER BY o.created_at DESC",
-                              (session["user_id"], status_filter)).fetchall()
+        orders = conn.execute(
+            base_q + " AND o.status=? ORDER BY o.created_at DESC",
+            (session["user_id"], status_filter),
+        ).fetchall()
     else:
-        orders = conn.execute(base_q + " ORDER BY o.created_at DESC",
-                              (session["user_id"],)).fetchall()
+        orders = conn.execute(
+            base_q + " ORDER BY o.created_at DESC", (session["user_id"],)
+        ).fetchall()
     conn.close()
-    return render_template("delivery/my_orders.html",
-                           orders=orders,
-                           status_filter=status_filter)
+    return render_template(
+        "delivery/my_orders.html", orders=orders, status_filter=status_filter
+    )
 
 
 @app.route("/delivery/orders/update/<int:order_id>", methods=["POST"])
@@ -463,7 +511,7 @@ def delivery_update(order_id):
         conn = get_db()
         conn.execute(
             "UPDATE orders SET status=? WHERE id=? AND assigned_to=?",
-            (new_status, order_id, session["user_id"])
+            (new_status, order_id, session["user_id"]),
         )
         conn.commit()
         conn.close()
@@ -486,8 +534,9 @@ def delivery_admin():
         LEFT JOIN users ud ON o.assigned_to=ud.id
     """
     if status_filter != "all":
-        orders = conn.execute(base_q + " WHERE o.status=? ORDER BY o.created_at DESC",
-                              (status_filter,)).fetchall()
+        orders = conn.execute(
+            base_q + " WHERE o.status=? ORDER BY o.created_at DESC", (status_filter,)
+        ).fetchall()
     else:
         orders = conn.execute(base_q + " ORDER BY o.created_at DESC").fetchall()
 
@@ -497,18 +546,30 @@ def delivery_admin():
 
     stats = {
         "total": conn.execute("SELECT COUNT(*) FROM orders").fetchone()[0],
-        "pending": conn.execute("SELECT COUNT(*) FROM orders WHERE status='pending'").fetchone()[0],
-        "active": conn.execute("SELECT COUNT(*) FROM orders WHERE status IN ('preparing','out_for_delivery')").fetchone()[0],
-        "delivered": conn.execute("SELECT COUNT(*) FROM orders WHERE status='delivered'").fetchone()[0],
-        "unassigned": conn.execute("SELECT COUNT(*) FROM orders WHERE assigned_to IS NULL").fetchone()[0],
-        "revenue": conn.execute("SELECT COALESCE(SUM(total_price),0) FROM orders WHERE status='delivered'").fetchone()[0],
+        "pending": conn.execute(
+            "SELECT COUNT(*) FROM orders WHERE status='pending'"
+        ).fetchone()[0],
+        "active": conn.execute(
+            "SELECT COUNT(*) FROM orders WHERE status IN ('preparing','out_for_delivery')"
+        ).fetchone()[0],
+        "delivered": conn.execute(
+            "SELECT COUNT(*) FROM orders WHERE status='delivered'"
+        ).fetchone()[0],
+        "unassigned": conn.execute(
+            "SELECT COUNT(*) FROM orders WHERE assigned_to IS NULL"
+        ).fetchone()[0],
+        "revenue": conn.execute(
+            "SELECT COALESCE(SUM(total_price),0) FROM orders WHERE status='delivered'"
+        ).fetchone()[0],
     }
     conn.close()
-    return render_template("delivery/admin.html",
-                           orders=orders,
-                           partners=partners,
-                           stats=stats,
-                           status_filter=status_filter)
+    return render_template(
+        "delivery/admin.html",
+        orders=orders,
+        partners=partners,
+        stats=stats,
+        status_filter=status_filter,
+    )
 
 
 @app.route("/delivery/admin/assign/<int:order_id>", methods=["POST"])
@@ -517,7 +578,9 @@ def delivery_assign(order_id):
     partner_id = request.form.get("partner_id", "").strip()
     conn = get_db()
     if partner_id:
-        conn.execute("UPDATE orders SET assigned_to=? WHERE id=?", (int(partner_id), order_id))
+        conn.execute(
+            "UPDATE orders SET assigned_to=? WHERE id=?", (int(partner_id), order_id)
+        )
         p = conn.execute("SELECT name FROM users WHERE id=?", (partner_id,)).fetchone()
         flash(f"Assigned to {p['name']}.", "success")
     else:
