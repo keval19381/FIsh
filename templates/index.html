@@ -3,34 +3,35 @@
 {% block content %}
 
 <!-- Hero -->
-<div style="background:linear-gradient(135deg,#0D47A1 0%,#1976D2 60%,#42A5F5 100%);padding:4rem 1.5rem 3rem;text-align:center;color:#fff;">
-  <div style="font-size:4rem;margin-bottom:1rem;">🐟</div>
-  <h1 style="font-size:2.4rem;font-weight:900;letter-spacing:-0.5px;margin-bottom:0.75rem;">Fresh Fish, Right to Your Door</h1>
-  <p style="font-size:1.1rem;opacity:0.88;max-width:520px;margin:0 auto 2rem;">Order the freshest catch from local sellers and get it delivered fast — like a mini Swiggy for seafood.</p>
-  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-    {% if session.user_id %}
-      <a href="{{ url_for('role_home') }}" class="btn btn-accent btn-lg">Go to Dashboard →</a>
-    {% else %}
-      <a href="{{ url_for('register') }}" class="btn btn-accent btn-lg">Get Started Free</a>
-      <a href="{{ url_for('login') }}" class="btn btn-outline btn-lg" style="border-color:#fff;color:#fff;">Log In</a>
-    {% endif %}
-  </div>
-</div>
+<div class="hero-section">
+  <div class="container" style="text-align:center;">
+    <div style="max-width: 720px; margin: 0 auto;">
+      <div style="font-size: 3.8rem; margin-bottom: 1rem;">🐟</div>
+      <h1>Fresh seafood delivered from local sellers to your kitchen.</h1>
+      <p class="page-subtitle">Order directly from trusted sellers, track delivery, and enjoy farm-to-table freshness in every bite.</p>
+      <div class="hero-actions">
+        {% if session.user_id %}
+          <a href="{{ url_for('role_home') }}" class="btn btn-primary btn-lg">Go to Dashboard →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="btn btn-secondary btn-lg">Get Started Free</a>
+          <a href="{{ url_for('login') }}" class="btn btn-ghost btn-lg" style="color:#fff;border-color:rgba(255,255,255,0.75);">Log In</a>
+        {% endif %}
+      </div>
+    </div>
 
-<!-- Stats bar -->
-<div style="background:#fff;border-bottom:1px solid var(--border);padding:1.25rem 1.5rem;">
-  <div class="container" style="display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;">
-    <div style="text-align:center;">
-      <div style="font-size:1.6rem;font-weight:900;color:var(--primary);">{{ fish_count }}+</div>
-      <div style="font-size:0.8rem;color:var(--text-muted);font-weight:500;">Fish Listed</div>
-    </div>
-    <div style="text-align:center;">
-      <div style="font-size:1.6rem;font-weight:900;color:var(--success);">{{ order_count }}+</div>
-      <div style="font-size:0.8rem;color:var(--text-muted);font-weight:500;">Orders Placed</div>
-    </div>
-    <div style="text-align:center;">
-      <div style="font-size:1.6rem;font-weight:900;color:var(--accent);">{{ seller_count }}+</div>
-      <div style="font-size:0.8rem;color:var(--text-muted);font-weight:500;">Local Sellers</div>
+    <div class="hero-stat-grid">
+      <div class="hero-stat">
+        <div class="hero-stat-value">{{ fish_count }}+</div>
+        <div class="hero-stat-label">Fresh Listings</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">{{ order_count }}+</div>
+        <div class="hero-stat-label">Orders Delivered</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">{{ seller_count }}+</div>
+        <div class="hero-stat-label">Trusted Sellers</div>
+      </div>
     </div>
   </div>
 </div>
