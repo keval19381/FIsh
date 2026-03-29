@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmed — FishDelivery{% endblock %}
+{% block content %}
+<div class="container page">
+  <div style="max-width:560px;margin:0 auto;">
+    <div class="confirm-box">
+      <div class="check">🎉</div>
+      <h2>Order Placed Successfully!</h2>
+      <p style="color:var(--text-muted);margin-top:0.5rem;">Your fresh fish is on its way!</p>
+      <div class="order-num">{{ order.order_number }}</div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-weight:700;margin-bottom:1.1rem;color:var(--primary-dark);">📦 Order Summary</h3>
+      <div style="display:flex;flex-direction:column;gap:0.75rem;">
+        <div style="display:flex;justify-content:space-between;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">
+          <span class="text-muted">Fish</span>
+          <span style="font-weight:700;">
+            {% if order.image_path %}
+            <img src="{{ url_for('static', filename=order.image_path) }}" style="width:28px;height:28px;border-radius:4px;object-fit:cover;vertical-align:middle;margin-right:6px;">
+            {% endif %}
+            {{ order.fish_name }}
+          </span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span class="text-muted">Price per kg</span>
+          <span class="price-tag">₹{{ "%.2f"|format(order.fish_price) }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span class="text-muted">Quantity</span>
+          <span style="font-weight:600;">{{ order.quantity }} kg</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--primary-light);border-radius:var(--radius-sm);margin-top:0.25rem;">
+          <span style="font-weight:700;color:var(--primary-dark);">Total Amount</span>
+          <span style="font-size:1.25rem;font-weight:900;color:var(--primary);">₹{{ "%.2f"|format(order.total_price) }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:0.25rem;">
+          <span class="text-muted">Delivery Address</span>
+          <span style="font-weight:600;text-align:right;max-width:220px;">{{ order.delivery_address }}{% if order.delivery_city %}, {{ order.delivery_city }}{% endif %}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span class="text-muted">Status</span>
+          <span class="badge badge-pending">⏳ Pending</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span class="text-muted">Placed At</span>
+          <span class="text-sm text-muted">{{ order.created_at[:16] if order.created_at else '—' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+      <a href="{{ url_for('customer_orders') }}" class="btn btn-primary" style="flex:1;">📋 Track My Orders</a>
+      <a href="{{ url_for('customer_browse') }}" class="btn btn-ghost" style="flex:1;">🛒 Order More</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Order {{ fish.name }} — FishDelivery{% endblock %}
+{% block content %}
+<div class="container page">
+  <div class="page-header">
+    <div class="page-title">🛒 Place Your Order</div>
+    <div class="page-subtitle">Fill in delivery details to complete your order</div>
+  </div>
+
+  <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start;">
+    <!-- Order form -->
+    <div style="flex:1;min-width:280px;">
+      <div class="card card-lg">
+        <form method="POST" action="{{ url_for('customer_order', fish_id=fish.id) }}" class="with-loading">
+          <div class="form-group">
+            <label class="form-label">Delivery Address *</label>
+            <textarea name="address" class="form-control" rows="2" placeholder="House no, Street, Area" required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">City *</label>
+            <input type="text" name="city" class="form-control" placeholder="Mumbai" value="{{ session.get('user_city','') }}"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="quantity">Quantity (kg) *</label>
+            <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="0.5" step="0.5" required/>
+            <div class="form-hint">Min 0.5 kg</div>
+          </div>
+
+          <!-- Total calculator -->
+          <div style="background:var(--primary-light);border-radius:var(--radius-sm);padding:1rem 1.25rem;margin:1.25rem 0;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-weight:600;color:var(--primary-dark);">Estimated Total</span>
+            <span id="total-display" style="font-size:1.3rem;font-weight:900;color:var(--primary);">₹0.00</span>
+          </div>
+          <input type="hidden" id="price-per-kg" data-price="{{ fish.price }}"/>
+
+          <button type="submit" class="btn btn-accent btn-lg btn-full">🛒 Confirm Order</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Fish summary -->
+    <div style="width:260px;min-width:220px;">
+      <div class="card" style="position:sticky;top:80px;">
+        {% if fish.image_path %}
+          <img src="{{ url_for('static', filename=fish.image_path) }}" style="width:100%;height:160px;object-fit:cover;border-radius:var(--radius-sm);margin-bottom:1rem;" alt="{{ fish.name }}"/>
+        {% else %}
+          <div style="width:100%;height:160px;background:var(--primary-light);border-radius:var(--radius-sm);margin-bottom:1rem;display:flex;align-items:center;justify-content:center;font-size:4rem;">🐟</div>
+        {% endif %}
+        <div style="font-size:1.1rem;font-weight:800;color:var(--text);">{{ fish.name }}</div>
+        <div style="font-size:1.4rem;font-weight:900;color:var(--primary);margin-top:0.25rem;">₹{{ "%.2f"|format(fish.price) }} <span style="font-size:0.75rem;font-weight:500;color:var(--text-muted)">/kg</span></div>
+        {% if fish.description %}
+        <div class="text-muted text-sm" style="margin-top:0.5rem;line-height:1.6;">{{ fish.description }}</div>
+        {% endif %}
+        <div style="margin-top:0.75rem;">
+          <span class="badge badge-available">✓ In Stock</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
