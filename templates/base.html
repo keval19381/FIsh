@@ -1,59 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}FishDelivery | Fresh Seafood Delivered{% endblock %}</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}FishDelivery🐟{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
   {% block head %}{% endblock %}
 </head>
 <body>
 
 {% if not hide_nav %}
 <nav class="navbar">
-  <div class="container navbar-inner">
-    <a href="/" class="navbar-brand">FishDelivery</a>
+  <a href="/" class="navbar-brand">🐟 FishDelivery</a>
 
-    <div class="navbar-links" id="nav-links">
-      {% if session.user_role == 'seller' or session.user_role == 'admin' %}
-        <a href="{{ url_for('seller_dashboard') }}" class="nav-link {% if request.path.startswith('/seller') %}active{% endif %}">Seller</a>
-      {% endif %}
-      {% if session.user_role == 'customer' or session.user_role == 'admin' %}
-        <a href="{{ url_for('customer_browse') }}" class="nav-link {% if request.path.startswith('/customer') %}active{% endif %}">Browse Fish</a>
-        <a href="{{ url_for('customer_orders') }}" class="nav-link {% if request.path == '/customer/orders' %}active{% endif %}">My Orders</a>
-      {% endif %}
-      {% if session.user_role in ('delivery', 'admin') %}
-        <a href="{{ url_for('delivery_orders') }}" class="nav-link {% if request.path == '/delivery/orders' %}active{% endif %}">My Deliveries</a>
-      {% endif %}
-      {% if session.user_role == 'admin' %}
-        <a href="{{ url_for('delivery_admin') }}" class="nav-link {% if request.path == '/delivery/admin' %}active{% endif %}">Admin</a>
-      {% endif %}
-    </div>
+  <div class="navbar-links" id="nav-links">
+    {% if session.user_role == 'seller' or session.user_role == 'admin' %}
+      <a href="{{ url_for('seller_dashboard') }}" class="nav-link {% if request.path.startswith('/seller') %}active{% endif %}">🏪 Seller</a>
+    {% endif %}
+    {% if session.user_role == 'customer' or session.user_role == 'admin' %}
+      <a href="{{ url_for('customer_browse') }}" class="nav-link {% if request.path.startswith('/customer') %}active{% endif %}">🛒 Browse Fish</a>
+      <a href="{{ url_for('customer_orders') }}" class="nav-link {% if request.path == '/customer/orders' %}active{% endif %}">📋 My Orders</a>
+    {% endif %}
+    {% if session.user_role in ('delivery', 'admin') %}
+      <a href="{{ url_for('delivery_orders') }}" class="nav-link {% if request.path == '/delivery/orders' %}active{% endif %}">🚚 My Deliveries</a>
+    {% endif %}
+    {% if session.user_role == 'admin' %}
+      <a href="{{ url_for('delivery_admin') }}" class="nav-link {% if request.path == '/delivery/admin' %}active{% endif %}">📦 Admin</a>
+    {% endif %}
+  </div>
 
-    <div class="navbar-actions">
-      {% if session.user_id %}
-        <span class="nav-badge">
-          {% if session.user_role == 'seller' %}Seller
-          {% elif session.user_role == 'customer' %}Customer
-          {% elif session.user_role == 'delivery' %}Delivery
-          {% elif session.user_role == 'admin' %}Admin
-          {% endif %}
-          {{ session.user_name }}
-        </span>
-        <form method="POST" action="{{ url_for('logout') }}" class="logout-form">
-          <button type="submit" class="btn btn-ghost btn-sm">Logout</button>
-        </form>
-      {% else %}
-        <a href="{{ url_for('login') }}" class="nav-link">Login</a>
-        <a href="{{ url_for('register') }}" class="btn btn-primary btn-sm">Sign Up</a>
-      {% endif %}
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
+  <div class="navbar-actions">
+    {% if session.user_id %}
+      <span class="nav-badge">
+        {% if session.user_role == 'seller' %}🏪
+        {% elif session.user_role == 'customer' %}👤
+        {% elif session.user_role == 'delivery' %}🚚
+        {% elif session.user_role == 'admin' %}👑
+        {% endif %}
+        {{ session.user_name }}
+        <span class="nav-role">{{ session.user_role }}</span>
+      </span>
+      <form method="POST" action="{{ url_for('logout') }}" style="display:inline;">
+        <button type="submit" class="btn btn-ghost btn-sm" style="color:#fff;background:rgba(255,255,255,0.15);">Logout</button>
+      </form>
+    {% else %}
+      <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+      <a href="{{ url_for('register') }}" class="btn btn-accent btn-sm">Sign Up</a>
+    {% endif %}
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 {% endif %}

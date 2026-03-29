@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% set hide_nav = true %}
+{% block title %}Sign Up — FishDelivery{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card" style="max-width:500px;">
+    <div class="auth-logo">
+      <div class="icon">🐟</div>
+      <h1>Create Account</h1>
+      <p>Join FishDelivery today</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('register') }}" class="with-loading">
+      <!-- Role selector -->
+      <div class="form-group">
+        <label class="form-label">I want to join as</label>
+        <div class="role-options">
+          <label class="role-option {% if request.args.get('role','customer') == 'seller' %}selected{% endif %}">
+            <input type="radio" name="role" value="seller" {% if request.args.get('role') == 'seller' %}checked{% endif %}/>
+            <div class="role-icon">🏪</div>
+            <div class="role-name">Seller</div>
+          </label>
+          <label class="role-option {% if request.args.get('role','customer') == 'customer' or not request.args.get('role') %}selected{% endif %}">
+            <input type="radio" name="role" value="customer" {% if request.args.get('role','customer') == 'customer' %}checked{% endif %}/>
+            <div class="role-icon">👤</div>
+            <div class="role-name">Customer</div>
+          </label>
+          <label class="role-option {% if request.args.get('role') == 'delivery' %}selected{% endif %}">
+            <input type="radio" name="role" value="delivery" {% if request.args.get('role') == 'delivery' %}checked{% endif %}/>
+            <div class="role-icon">🚚</div>
+            <div class="role-name">Delivery</div>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="name">Full Name</label>
+          <input type="text" id="name" name="name" class="form-control" placeholder="John Doe" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="city">City</label>
+          <input type="text" id="city" name="city" class="form-control" placeholder="Mumbai"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="email">Email Address</label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="you@example.com" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Min 6 characters" required/>
+        <div class="form-hint">At least 6 characters</div>
+      </div>
+
+      <button type="submit" class="btn btn-accent btn-lg btn-full" style="margin-top:0.5rem;">Create Account 🎉</button>
+    </form>
+
+    <div class="divider">already have an account?</div>
+    <a href="{{ url_for('login') }}" class="btn btn-ghost btn-full">Back to Login</a>
+  </div>
+</div>
+{% endblock %}

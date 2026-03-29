@@ -14,6 +14,7 @@ from flask import (
     session,
     jsonify,
 )
+from werkzeug.exceptions import HTTPException
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -27,6 +28,15 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024  # 5MB
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+
+@app.errorhandler(Exception)
+def handle_unexpected_error(error):
+    if isinstance(error, HTTPException):
+        return error
+    app.logger.exception("Unexpected error")
+    flash("Something went wrong. Please try again.", "error")
+    return redirect(url_for("index"))
 
 
 def allowed_file(filename):

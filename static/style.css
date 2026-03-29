@@ -20,7 +20,7 @@
   --radius: 16px;
   --radius-sm: 10px;
   --radius-full: 9999px;
-  --transition: 0.3s ease;
+  --transition: 0.25s ease;
 }
 
 /* ── Global Reset ────────────────────────────────────────────────────────── */
@@ -42,6 +42,8 @@ body {
   min-height: 100vh;
   line-height: 1.65;
   font-size: 16px;
+  opacity: 0;
+  animation: fadeIn 0.25s ease forwards;
 }
 
 img {
@@ -279,7 +281,7 @@ button {
 }
 
 .card:hover {
-  transform: scale(1.03);
+  transform: scale(1.02);
   box-shadow: var(--shadow);
 }
 
