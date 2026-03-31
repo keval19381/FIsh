@@ -3,7 +3,7 @@
 {% block content %}
 
 <!-- Hero -->
-<div style="background:linear-gradient(135deg,#0D47A1 0%,#1976D2 60%,#42A5F5 100%);padding:4rem 1.5rem 3rem;text-align:center;color:#fff;">
+<div class="hero-section">
   <div style="font-size:4rem;margin-bottom:1rem;">🐟</div>
   <h1 style="font-size:2.4rem;font-weight:900;letter-spacing:-0.5px;margin-bottom:0.75rem;">Fresh Fish, Right to Your Door</h1>
   <p style="font-size:1.1rem;opacity:0.88;max-width:520px;margin:0 auto 2rem;">Order the freshest catch from local sellers and get it delivered fast — like a mini Swiggy for seafood.</p>
@@ -18,7 +18,7 @@
 </div>
 
 <!-- Stats bar -->
-<div style="background:#fff;border-bottom:1px solid var(--border);padding:1.25rem 1.5rem;">
+<div class="stats-bar">
   <div class="container" style="display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;">
     <div style="text-align:center;">
       <div style="font-size:1.6rem;font-weight:900;color:var(--primary);">{{ fish_count }}+</div>
@@ -64,21 +64,21 @@
   <h2 style="font-size:1.4rem;font-weight:800;color:var(--primary-dark);text-align:center;margin-bottom:1.5rem;">Join as</h2>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem;">
     <a href="{{ url_for('register') }}?role=seller" style="text-decoration:none;">
-      <div class="card" style="text-align:center;cursor:pointer;transition:all 0.2s;border:2px solid transparent;" onmouseover="this.style.borderColor='#1565C0';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='transparent';this.style.transform='';">
+      <div class="card role-card">
         <div style="font-size:2.2rem;margin-bottom:0.6rem;">🏪</div>
         <div style="font-weight:800;font-size:1rem;color:var(--primary-dark);">Seller</div>
         <div class="text-muted" style="font-size:0.82rem;margin-top:0.3rem;">List your fish, manage inventory, earn revenue</div>
       </div>
     </a>
     <a href="{{ url_for('register') }}?role=customer" style="text-decoration:none;">
-      <div class="card" style="text-align:center;cursor:pointer;transition:all 0.2s;border:2px solid transparent;" onmouseover="this.style.borderColor='var(--success)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='transparent';this.style.transform='';">
+      <div class="card role-card">
         <div style="font-size:2.2rem;margin-bottom:0.6rem;">👤</div>
         <div style="font-weight:800;font-size:1rem;color:var(--primary-dark);">Customer</div>
         <div class="text-muted" style="font-size:0.82rem;margin-top:0.3rem;">Browse fresh fish, place orders, track delivery</div>
       </div>
     </a>
     <a href="{{ url_for('register') }}?role=delivery" style="text-decoration:none;">
-      <div class="card" style="text-align:center;cursor:pointer;transition:all 0.2s;border:2px solid transparent;" onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='transparent';this.style.transform='';">
+      <div class="card role-card">
         <div style="font-size:2.2rem;margin-bottom:0.6rem;">🚚</div>
         <div style="font-weight:800;font-size:1rem;color:var(--primary-dark);">Delivery Partner</div>
         <div class="text-muted" style="font-size:0.82rem;margin-top:0.3rem;">Deliver orders, earn on every successful delivery</div>
@@ -87,8 +87,8 @@
   </div>
 
   {% if not session.user_id %}
-  <div style="margin-top:2rem;padding:1.5rem;background:linear-gradient(135deg,#E3F2FD,#E8EAF6);border-radius:var(--radius);text-align:center;">
-    <p style="font-weight:600;color:var(--primary-dark);margin-bottom:0.5rem;">Admin demo: <code style="background:#fff;padding:2px 8px;border-radius:4px;font-size:0.85rem;">admin@fish.com</code> / <code style="background:#fff;padding:2px 8px;border-radius:4px;font-size:0.85rem;">admin123</code></p>
+  <div class="admin-demo">
+    <p style="font-weight:600;color:var(--accent);margin-bottom:0.5rem;">Admin demo: <code class="demo-code">admin@fish.com</code> / <code class="demo-code">admin123</code></p>
     <p class="text-muted" style="font-size:0.82rem;">Full access to all portals and admin panel</p>
   </div>
   {% endif %}

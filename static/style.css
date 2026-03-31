@@ -1,24 +1,27 @@
 /* ── CSS Variables ───────────────────────────────────────────────────────── */
 :root {
-  --primary: #0d6efd;
-  --primary-dark: #0b5ed7;
-  --primary-light: #dbe6ff;
-  --secondary: #20c997;
-  --secondary-light: #d2f5e4;
-  --success: #198754;
-  --success-light: #d1e7dd;
-  --accent: #ffc107;
-  --accent-light: #fff4cd;
-  --bg: #f8f9fa;
-  --card: #ffffff;
-  --text: #212529;
-  --text-muted: #495057;
-  --border: #dee2e6;
-  --shadow-sm: 0 4px 15px rgba(33,37,41,0.08);
-  --shadow: 0 12px 35px rgba(33,37,41,0.08);
-  --shadow-lg: 0 18px 50px rgba(33,37,41,0.12);
-  --radius: 16px;
-  --radius-sm: 10px;
+  --primary: #d19758;
+  --primary-dark: #b8793d;
+  --primary-light: rgba(209,151,88,0.14);
+  --secondary: #63b995;
+  --secondary-light: rgba(99,185,149,0.14);
+  --success: #8ccf9f;
+  --success-light: rgba(140,207,159,0.16);
+  --accent: #f2b26c;
+  --accent-light: rgba(242,178,108,0.16);
+  --bg: #091116;
+  --surface: #111a22;
+  --surface-strong: #131f29;
+  --card: #121d26;
+  --text: #e7eef5;
+  --text-muted: #9ab0c4;
+  --text-soft: #c0cad6;
+  --border: rgba(255,255,255,0.1);
+  --shadow-sm: 0 12px 34px rgba(0,0,0,0.24);
+  --shadow: 0 20px 60px rgba(0,0,0,0.28);
+  --shadow-lg: 0 24px 80px rgba(0,0,0,0.32);
+  --radius: 22px;
+  --radius-sm: 14px;
   --radius-full: 9999px;
   --transition: 0.25s ease;
 }
@@ -37,7 +40,7 @@ html {
 
 body {
   font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg);
+  background: radial-gradient(circle at top, rgba(82, 137, 105, 0.12), transparent 20%), var(--bg);
   color: var(--text);
   min-height: 100vh;
   line-height: 1.65;
@@ -116,13 +119,79 @@ button {
 }
 
 .hero-section {
-  background: linear-gradient(135deg, #0d6efd 0%, #20c997 55%, #ffc107 100%);
-  color: #fff;
+  position: relative;
+  background: linear-gradient(135deg, #111b24 0%, #14202a 48%, #1c2b38 100%);
+  color: #eef3f9;
   padding: 4rem 1.5rem 3rem;
   border-radius: 28px;
-  box-shadow: 0 28px 70px rgba(13,110,253,0.16);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.32);
   overflow: hidden;
   margin: 2rem 0;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.hero-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(242,178,108,0.18), transparent 30%);
+  opacity: 0.8;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.hero-section > * {
+  position: relative;
+}
+.hero-section h1,
+.hero-section p,
+.hero-section .btn {
+  position: relative;
+  z-index: 1;
+}
+.stats-bar {
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.stats-bar .container {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+.stats-bar .stat-number {
+  font-size: 1.6rem;
+  font-weight: 900;
+}
+.stats-bar .stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.role-card {
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+.role-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(242,178,108,0.35);
+  box-shadow: 0 24px 50px rgba(0,0,0,0.2);
+}
+.admin-demo {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: rgba(255,255,255,0.04);
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.demo-code {
+  background: rgba(255,255,255,0.08);
+  padding: 0.25rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--text-soft);
 }
 
 .hero-section h1 {
@@ -169,9 +238,9 @@ button {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #fff;
-  border-bottom: 1px solid rgba(13,110,253,0.08);
-  box-shadow: 0 12px 30px rgba(13,110,253,0.05);
+  background: rgba(15, 24, 33, 0.98);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.24);
 }
 
 .navbar-inner {
@@ -185,7 +254,7 @@ button {
 .navbar-brand {
   font-size: 1.45rem;
   font-weight: 800;
-  color: var(--primary);
+  color: var(--accent);
 }
 
 .navbar-links {
@@ -198,7 +267,7 @@ button {
 }
 
 .nav-link {
-  color: var(--text-muted);
+  color: var(--text-soft);
   padding: 0.72rem 1rem;
   border-radius: 9999px;
   font-weight: 600;
@@ -207,8 +276,8 @@ button {
 
 .nav-link:hover,
 .nav-link.active {
-  color: var(--primary);
-  background: rgba(13,110,253,0.1);
+  color: var(--accent);
+  background: rgba(242,178,108,0.16);
 }
 
 .navbar-actions {
@@ -238,9 +307,9 @@ button {
   display: none;
   width: 42px;
   height: 42px;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 9999px;
-  background: #fff;
+  background: rgba(255,255,255,0.06);
   align-items: center;
   justify-content: center;
 }
@@ -273,15 +342,16 @@ button {
 
 /* ── Cards ───────────────────────────────────────────────────────────────── */
 .card {
-  background: var(--card);
+  background: var(--surface);
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
   padding: 1.6rem;
-  transition: transform var(--transition), box-shadow var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
 .card:hover {
-  transform: scale(1.02);
+  transform: translateY(-2px);
   box-shadow: var(--shadow);
 }
 
@@ -347,17 +417,17 @@ button {
 
 .btn:hover { transform: translateY(-2px); }
 
-.btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover { background: var(--primary-dark); }
+.btn-primary { background: var(--accent); color: #0f1721; }
+.btn-primary:hover { background: #d09a5a; }
 
-.btn-secondary { background: var(--secondary); color: #fff; }
+.btn-secondary { background: var(--secondary); color: #0f1721; }
 
-.btn-accent { background: var(--accent); color: #212529; }
-.btn-accent:hover { background: #e0a800; }
+.btn-accent { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.12); }
+.btn-accent:hover { background: rgba(255,255,255,0.14); }
 
-.btn-danger { background: #dc3545; color: #fff; }
+.btn-danger { background: #d15b47; color: #fff; }
 
-.btn-warning { background: var(--accent); color: #212529; }
+.btn-warning { background: var(--accent); color: #0f1721; }
 
 .btn-ghost {
   background: transparent;
@@ -380,16 +450,20 @@ button {
 input, textarea, select {
   width: 100%;
   padding: 1rem 1rem;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 14px;
   color: var(--text);
-  background: #fff;
+  background: rgba(255,255,255,0.04);
+}
+
+input::placeholder, textarea::placeholder {
+  color: rgba(231,238,245,0.6);
 }
 
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 5px rgba(13,110,253,0.12);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 5px rgba(242,178,108,0.14);
 }
 
 textarea { min-height: 130px; resize: vertical; }
@@ -423,7 +497,7 @@ label {
   gap: 0.75rem;
   padding: 1rem 1.1rem;
   border-radius: 16px;
-  background: #fff;
+  background: rgba(18, 29, 38, 0.95);
   box-shadow: var(--shadow-sm);
   color: var(--text);
 }
@@ -434,7 +508,7 @@ label {
 #loading-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(248,249,250,0.92);
+  background: rgba(9,17,22,0.9);
   display: none;
   align-items: center;
   justify-content: center;
@@ -444,11 +518,11 @@ label {
 
 #loading-overlay.active { display: flex; }
 
-.spinner {
+..spinner {
   width: 24px;
   height: 24px;
-  border: 3px solid rgba(13,110,253,0.18);
-  border-top-color: var(--primary);
+  border: 3px solid rgba(242,178,108,0.18);
+  border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -474,9 +548,9 @@ label {
     gap: 0.5rem;
     width: 100%;
     padding: 0.75rem 0;
-    background: #fff;
+    background: rgba(255,255,255,0.05);
     border-radius: 0 0 16px 16px;
-    box-shadow: 0 12px 30px rgba(13,110,253,0.08);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.16);
     overflow: hidden;
   }
   .navbar-links.open { display: flex; }
