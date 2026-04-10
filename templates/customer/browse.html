@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Browse Fish — FishDelivery{% endblock %}
+{% block title %}Browse Fresh Fish — FishDelivery{% endblock %}
 {% block content %}
 <div class="container page">
   <div class="page-header">
@@ -7,19 +7,30 @@
     <div class="page-subtitle">Order fresh, get it delivered fast — all prices in ₹/kg</div>
   </div>
 
-  <!-- Search -->
-  <form method="GET" action="{{ url_for('customer_browse') }}" style="display:flex;gap:0.75rem;margin-bottom:1.5rem;">
-    <input type="text" name="q" id="fish-search" class="form-control" placeholder="🔍 Search fish by name..." value="{{ query }}" autocomplete="off"/>
-    {% if query %}
-    <a href="{{ url_for('customer_browse') }}" class="btn btn-ghost">✕ Clear</a>
-    {% else %}
-    <button type="submit" class="btn btn-primary">Search</button>
-    {% endif %}
-  </form>
+  <!-- Search and Filter -->
+  <div class="browse-controls">
+    <form method="GET" action="{{ url_for('customer_browse') }}" class="search-form">
+      <input type="text" name="q" id="fish-search" placeholder="🔍 Search for fish..." value="{{ query }}" autocomplete="off"/>
+      {% if query %}
+      <a href="{{ url_for('customer_browse') }}" class="btn btn-ghost">✕ Clear</a>
+      {% else %}
+      <button type="submit" class="btn btn-primary">Search</button>
+      {% endif %}
+    </form>
+    
+    <div class="filter-controls">
+      <select name="sort" onchange="sortProducts(this.value)">
+        <option value="">Sort by</option>
+        <option value="price_low">Price: Low to High</option>
+        <option value="price_high">Price: High to Low</option>
+        <option value="name">Name</option>
+      </select>
+    </div>
+  </div>
 
   {% if query %}
-  <p class="text-muted" style="margin-bottom:1rem;">
-    Results for "<strong>{{ query }}</strong>" — {{ fish_list|length }} fish found
+  <p class="text-muted" style="margin-bottom:1.5rem;">
+    Showing results for "<strong>{{ query }}</strong>" — <strong>{{ fish_list|length }}</strong> fish found
   </p>
   {% endif %}
 
@@ -34,11 +45,13 @@
       {% endif %}
       <div class="fish-body">
         <div class="fish-name">{{ fish.name }}</div>
-        <div class="fish-price">₹{{ "%.2f"|format(fish.price) }} <span style="font-size:0.7rem;font-weight:500;color:var(--text-muted)">/ kg</span></div>
+        <div class="fish-price">₹{{ "%.2f"|format(fish.price) }} <span style="font-size:0.75rem;font-weight:500;color:var(--text-muted)">/ kg</span></div>
         {% if fish.description %}
-        <div class="fish-desc">{{ fish.description[:80] }}{% if fish.description|length > 80 %}...{% endif %}</div>
+        <div class="fish-desc">{{ fish.description[:100] }}{% if fish.description|length > 100 %}...{% endif %}</div>
         {% endif %}
-        <a href="{{ url_for('customer_order', fish_id=fish.id) }}" class="btn btn-accent btn-sm" style="margin-top:auto;">Order Now →</a>
+        <form method="POST" action="{{ url_for('add_to_cart', fish_id=fish.id) }}" style="margin-top:auto;">
+          <button type="submit" class="btn btn-primary btn-sm">Add to Cart 🛒</button>
+        </form>
       </div>
     </div>
     {% endfor %}
@@ -48,7 +61,7 @@
     <h3>No fish found</h3>
     <p>Try a different search term</p>
   </div>
-  {% else %}
+{% else %}
   <div class="empty-state">
     <div class="icon">🐟</div>
     <h3>No fish available right now</h3>
@@ -56,4 +69,57 @@
   </div>
   {% endif %}
 </div>
+
+<style>
+.browse-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.search-form input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.filter-controls select {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  min-width: 150px;
+}
+
+@media (max-width: 768px) {
+  .browse-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-controls {
+    justify-content: space-between;
+  }
+  
+  .filter-controls select {
+    min-width: auto;
+    flex: 1;
+  }
+}
+</style>
 {% endblock %}

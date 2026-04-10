@@ -1,96 +1,184 @@
 {% extends "base.html" %}
-{% block title %}FishDelivery — Fresh Fish at Your Door{% endblock %}
+{% block title %}AquaBasket — Fresh Fish at Your Door{% endblock %}
 {% block content %}
 
-<!-- Hero -->
-<div class="hero-section">
-  <div style="font-size:4rem;margin-bottom:1rem;">🐟</div>
-  <h1 style="font-size:2.4rem;font-weight:900;letter-spacing:-0.5px;margin-bottom:0.75rem;">Fresh Fish, Right to Your Door</h1>
-  <p style="font-size:1.1rem;opacity:0.88;max-width:520px;margin:0 auto 2rem;">Order the freshest catch from local sellers and get it delivered fast — like a mini Swiggy for seafood.</p>
-  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-    {% if session.user_id %}
-      <a href="{{ url_for('role_home') }}" class="btn btn-accent btn-lg">Go to Dashboard →</a>
-    {% else %}
-      <a href="{{ url_for('register') }}" class="btn btn-accent btn-lg">Get Started Free</a>
-      <a href="{{ url_for('login') }}" class="btn btn-outline btn-lg" style="border-color:#fff;color:#fff;">Log In</a>
-    {% endif %}
-  </div>
-</div>
+<div class="container">
 
-<!-- Stats bar -->
-<div class="stats-bar">
-  <div class="container" style="display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;">
-    <div style="text-align:center;">
-      <div style="font-size:1.6rem;font-weight:900;color:var(--primary);">{{ fish_count }}+</div>
-      <div style="font-size:0.8rem;color:var(--text-muted);font-weight:500;">Fish Listed</div>
-    </div>
-    <div style="text-align:center;">
-      <div style="font-size:1.6rem;font-weight:900;color:var(--success);">{{ order_count }}+</div>
-      <div style="font-size:0.8rem;color:var(--text-muted);font-weight:500;">Orders Placed</div>
-    </div>
-    <div style="text-align:center;">
-      <div style="font-size:1.6rem;font-weight:900;color:var(--accent);">{{ seller_count }}+</div>
-      <div style="font-size:0.8rem;color:var(--text-muted);font-weight:500;">Local Sellers</div>
-    </div>
-  </div>
-</div>
+<section class="hero-section section-appear">
+  <div class="hero-copy">
+    <span class="hero-label">✨ Premium Quality · Fresh Catch</span>
+    <h1>Fresh Fish &amp; Seafood Delivered to Your Doorstep</h1>
+    <p>Experience the freshest catch from trusted sellers. Clean cuts, transparent pricing, and fast chilled delivery — all in one place.</p>
 
-<!-- How it works -->
-<div class="container page">
-  <div style="text-align:center;margin-bottom:2rem;">
-    <h2 style="font-size:1.6rem;font-weight:800;color:var(--primary-dark);">How It Works</h2>
-    <p class="text-muted">Three simple steps to fresh fish</p>
-  </div>
+    <div class="hero-actions">
+      {% if session.user_id %}
+        <a href="{{ url_for('role_home') }}" class="btn btn-lg" style="background:#fff;color:var(--primary-dark)">Go to Dashboard →</a>
+      {% else %}
+        <a href="{{ url_for('register') }}" class="btn btn-lg" style="background:#fff;color:var(--primary-dark)">Start Ordering →</a>
+        <a href="{{ url_for('login') }}" class="btn btn-lg" style="border:2px solid rgba(255,255,255,.7);color:#fff;background:rgba(255,255,255,.12)">Login</a>
+      {% endif %}
+    </div>
 
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-bottom:3rem;">
-    <div class="card" style="text-align:center;border-top:4px solid var(--primary);">
-      <div style="font-size:2.5rem;margin-bottom:0.75rem;">🛒</div>
-      <h3 style="font-weight:700;margin-bottom:0.5rem;">Browse & Order</h3>
-      <p class="text-muted" style="font-size:0.88rem;">Pick from fresh fish listings, choose quantity, and place your order in seconds.</p>
-    </div>
-    <div class="card" style="text-align:center;border-top:4px solid var(--success);">
-      <div style="font-size:2.5rem;margin-bottom:0.75rem;">🔪</div>
-      <h3 style="font-weight:700;margin-bottom:0.5rem;">Seller Prepares</h3>
-      <p class="text-muted" style="font-size:0.88rem;">Your local seller freshly packs your fish and hands it to the delivery partner.</p>
-    </div>
-    <div class="card" style="text-align:center;border-top:4px solid var(--accent);">
-      <div style="font-size:2.5rem;margin-bottom:0.75rem;">🚚</div>
-      <h3 style="font-weight:700;margin-bottom:0.5rem;">Fast Delivery</h3>
-      <p class="text-muted" style="font-size:0.88rem;">Dedicated delivery partners bring your order right to your address.</p>
+    <div class="hero-metrics">
+      <div><strong>{{ fish_count }}+</strong><span>Fresh Listings</span></div>
+      <div><strong>{{ order_count }}+</strong><span>Orders Delivered</span></div>
+      <div><strong>{{ seller_count }}+</strong><span>Trusted Sellers</span></div>
     </div>
   </div>
 
-  <!-- Role cards -->
-  <h2 style="font-size:1.4rem;font-weight:800;color:var(--primary-dark);text-align:center;margin-bottom:1.5rem;">Join as</h2>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem;">
-    <a href="{{ url_for('register') }}?role=seller" style="text-decoration:none;">
-      <div class="card role-card">
-        <div style="font-size:2.2rem;margin-bottom:0.6rem;">🏪</div>
-        <div style="font-weight:800;font-size:1rem;color:var(--primary-dark);">Seller</div>
-        <div class="text-muted" style="font-size:0.82rem;margin-top:0.3rem;">List your fish, manage inventory, earn revenue</div>
+  <div class="hero-panel">
+    <div class="hero-panel-card">
+      <span class="panel-heading">🔥 Chef's Special Pick</span>
+      <h2>Premium Seafood Combo</h2>
+      <p>Handpicked fresh fish from nearby sellers, cleaned and delivered chilled.</p>
+      <div class="panel-stats">
+        <span>⚡ 30 Min Delivery</span>
+        <span>✨ Clean Cuts</span>
+        <span>❄️ Chilled</span>
       </div>
-    </a>
-    <a href="{{ url_for('register') }}?role=customer" style="text-decoration:none;">
-      <div class="card role-card">
-        <div style="font-size:2.2rem;margin-bottom:0.6rem;">👤</div>
-        <div style="font-weight:800;font-size:1rem;color:var(--primary-dark);">Customer</div>
-        <div class="text-muted" style="font-size:0.82rem;margin-top:0.3rem;">Browse fresh fish, place orders, track delivery</div>
-      </div>
-    </a>
-    <a href="{{ url_for('register') }}?role=delivery" style="text-decoration:none;">
-      <div class="card role-card">
-        <div style="font-size:2.2rem;margin-bottom:0.6rem;">🚚</div>
-        <div style="font-weight:800;font-size:1rem;color:var(--primary-dark);">Delivery Partner</div>
-        <div class="text-muted" style="font-size:0.82rem;margin-top:0.3rem;">Deliver orders, earn on every successful delivery</div>
-      </div>
-    </a>
+    </div>
   </div>
+</section>
 
-  {% if not session.user_id %}
-  <div class="admin-demo">
-    <p style="font-weight:600;color:var(--accent);margin-bottom:0.5rem;">Admin demo: <code class="demo-code">admin@fish.com</code> / <code class="demo-code">admin123</code></p>
-    <p class="text-muted" style="font-size:0.82rem;">Full access to all portals and admin panel</p>
+<section class="section section-appear">
+  <div class="section-head">
+    <span class="section-pretitle">Browse by Category</span>
+    <h2>What's Cooking Today?</h2>
+    <p>Explore our fresh categories for every meal</p>
   </div>
-  {% endif %}
+  <div class="category-grid">
+    <div class="category-pill">🐟 Fish &amp; Seafood</div>
+    <div class="category-pill">🦐 Prawns</div>
+    <div class="category-pill">🦀 Shellfish</div>
+    <div class="category-pill">🐠 Premium Fillets</div>
+    <div class="category-pill">🍣 Sushi-Grade Cuts</div>
+    <div class="category-pill">🎣 Fresh Catch Combo</div>
+  </div>
+</section>
+
+<section class="section section-appear">
+  <div class="section-head">
+    <span class="section-pretitle">Simple Process</span>
+    <h2>How It Works</h2>
+    <p>Three easy steps to get fresh fish delivered</p>
+  </div>
+  <div class="process-grid">
+    <article class="process-card">
+      <div class="process-number">1</div>
+      <h3>Browse &amp; Select</h3>
+      <p>Choose from fresh fish and seafood listed by trusted sellers near you.</p>
+    </article>
+    <article class="process-card">
+      <div class="process-number">2</div>
+      <h3>Place Order</h3>
+      <p>Select your preferred cut, quantity, and schedule delivery at your convenience.</p>
+    </article>
+    <article class="process-card">
+      <div class="process-number">3</div>
+      <h3>Get Chilled Delivery</h3>
+      <p>Receive your order fresh and chilled at your doorstep within minutes.</p>
+    </article>
+  </div>
+</section>
+
+<section class="section section-appear">
+  <div class="section-head">
+    <span class="section-pretitle">Why Choose Us</span>
+    <h2>The AquaBasket Advantage</h2>
+    <p>Quality and freshness guaranteed with every order</p>
+  </div>
+  <div class="benefit-grid">
+    <div class="benefit-card">
+      <h3>✨ Premium Quality</h3>
+      <p>Only the freshest catch, inspected and cleaned by expert sellers before delivery.</p>
+    </div>
+    <div class="benefit-card">
+      <h3>💰 Transparent Pricing</h3>
+      <p>No hidden charges or weight loss surprises. What you see is what you pay.</p>
+    </div>
+    <div class="benefit-card">
+      <h3>⚡ Fast Delivery</h3>
+      <p>Quick chilled delivery to ensure your order stays fresh until it reaches you.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-appear">
+  <div class="section-head">
+    <span class="section-pretitle">Trending Now</span>
+    <h2>Popular Seafood Picks</h2>
+    <p>Most loved by our customers</p>
+  </div>
+  <div class="popular-grid">
+    <div class="popular-card">
+      <div class="popular-image">
+        <img src="/static/uploads/default-fish.jpg" alt="Fresh Rohu Fish" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div style="display:none;height:175px;align-items:center;justify-content:center;font-size:3rem;background:var(--primary-light)">🐟</div>
+        <div class="popular-badge">🔥 Popular</div>
+      </div>
+      <div class="popular-content">
+        <h3>Fresh Rohu Fish</h3>
+        <p>₹250/kg</p>
+        <a href="{{ url_for('customer_browse') }}" class="btn btn-primary btn-sm">Order Now</a>
+      </div>
+    </div>
+    <div class="popular-card">
+      <div class="popular-image">
+        <img src="/static/uploads/default-fish.jpg" alt="Premium Prawns" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div style="display:none;height:175px;align-items:center;justify-content:center;font-size:3rem;background:var(--primary-light)">🦐</div>
+        <div class="popular-badge">⭐ Best Seller</div>
+      </div>
+      <div class="popular-content">
+        <h3>Premium Prawns</h3>
+        <p>₹400/kg</p>
+        <a href="{{ url_for('customer_browse') }}" class="btn btn-primary btn-sm">Order Now</a>
+      </div>
+    </div>
+    <div class="popular-card">
+      <div class="popular-image">
+        <img src="/static/uploads/default-fish.jpg" alt="Catla Fish" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div style="display:none;height:175px;align-items:center;justify-content:center;font-size:3rem;background:var(--primary-light)">🐠</div>
+        <div class="popular-badge">🆕 New</div>
+      </div>
+      <div class="popular-content">
+        <h3>Catla Fish</h3>
+        <p>₹220/kg</p>
+        <a href="{{ url_for('customer_browse') }}" class="btn btn-primary btn-sm">Order Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-appear" style="margin-bottom:2rem">
+  <div class="section-head">
+    <span class="section-pretitle">Exclusive Deals</span>
+    <h2>Special Offers</h2>
+    <p>Save more on your favorite seafood</p>
+  </div>
+  <div class="offers-grid">
+    <div class="offer-card">
+      <div class="offer-content">
+        <h3>🎉 First Order Discount</h3>
+        <p>Get 10% off on your first order</p>
+        <span class="offer-code">USE: WELCOME10</span>
+      </div>
+    </div>
+    <div class="offer-card">
+      <div class="offer-content">
+        <h3>🚚 Free Delivery</h3>
+        <p>Free delivery on orders above ₹500</p>
+        <span class="offer-code">Min. Order: ₹500</span>
+      </div>
+    </div>
+    <div class="offer-card">
+      <div class="offer-content">
+        <h3>⭐ Bulk Discount</h3>
+        <p>5% extra off on 5kg+ orders</p>
+        <span class="offer-code">Bulk Deal</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 </div>
 {% endblock %}

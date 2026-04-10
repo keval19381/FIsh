@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Checkout — FishDelivery{% endblock %}
+{% block content %}
+<div class="container page">
+  <div class="page-header">
+    <div class="page-title">💳 Checkout</div>
+    <div class="page-subtitle">Complete your order</div>
+  </div>
+
+  <div class="checkout-layout">
+    <div class="checkout-items">
+      <h3>Order Summary</h3>
+      <div class="checkout-item-list">
+        {% for item in items %}
+        <div class="checkout-item">
+          <span>{{ item.name }} × {{ item.quantity }}</span>
+          <span>₹{{ "%.2f"|format(item.subtotal) }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="checkout-total">
+        <strong>Total: ₹{{ "%.2f"|format(total) }}</strong>
+      </div>
+    </div>
+
+    <div class="checkout-form">
+      <h3>Delivery Details</h3>
+      <form method="POST">
+        <div class="form-group">
+          <label for="address">Delivery Address *</label>
+          <textarea name="address" id="address" required placeholder="Enter your full delivery address"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="city">City *</label>
+          <input type="text" name="city" id="city" required placeholder="Enter your city">
+        </div>
+        <div class="checkout-actions">
+          <a href="{{ url_for('cart') }}" class="btn btn-ghost">Back to Cart</a>
+          <button type="submit" class="btn btn-primary">Place Order</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.checkout-items {
+  background: #fff;
+  padding: 2rem;
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+}
+
+.checkout-item-list {
+  margin: 1rem 0;
+}
+
+.checkout-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.checkout-item:last-child {
+  border-bottom: none;
+}
+
+.checkout-total {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--border);
+  font-size: 1.2rem;
+  color: var(--primary);
+}
+
+.checkout-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.form-group textarea,
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.checkout-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .checkout-layout {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+{% endblock %}

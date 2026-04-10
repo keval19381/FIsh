@@ -1,6 +1,9 @@
 import importlib.util
 import os
+from dotenv import load_dotenv
 
+# Load environment variables FIRST before importing the app module
+load_dotenv()
 
 def _load_fish_delivery_app():
     root_dir = os.path.dirname(os.path.abspath(__file__))
@@ -29,9 +32,13 @@ if os.path.isdir(root_templates):
 if os.path.isdir(root_static):
     _fish_delivery.app.static_folder = root_static
 
+# Initialize database (no-op for Supabase, kept for compatibility)
+if hasattr(_fish_delivery, "init_db"):
+    _fish_delivery.init_db()
+
 app = _fish_delivery.app
 
 if __name__ == "__main__":
     if hasattr(_fish_delivery, "init_db"):
         _fish_delivery.init_db()
-    app.run(host="0.0.0.0")
+    app.run(host="127.0.0.1", port=5000, debug=False, use_reloader=False)

@@ -43,7 +43,22 @@ if (qtyInput && pricePerKg && totalDisplay) {
   calcTotal();
 }
 
-// ── Live fish search/filter ───────────────────────────────────────────────
+// ── Update cart count ────────────────────────────────────────────────────
+function updateCartCount() {
+  fetch('/cart/count')
+    .then(response => response.json())
+    .then(data => {
+      const cartCount = document.getElementById('cart-count');
+      if (cartCount) {
+        cartCount.textContent = data.count;
+        cartCount.style.display = data.count > 0 ? 'inline' : 'none';
+      }
+    })
+    .catch(error => console.error('Error updating cart count:', error));
+}
+
+// Update cart count on page load
+document.addEventListener('DOMContentLoaded', updateCartCount);
 const searchInput = document.getElementById('fish-search');
 const fishCards = document.querySelectorAll('.fish-card');
 

@@ -1,8 +1,8 @@
 # Workspace
 
-## Fish Delivery App
+## AquaBasket
 
-A production-ready Fish Delivery web platform built with Python Flask + SQLite — like a mini Swiggy for fish.
+A production-ready AquaBasket web platform built with Python Flask + SQLite — like a mini Swiggy for fish.
 
 - **Entry point**: `artifacts/fish-delivery/app.py`
 - **Templates**: `artifacts/fish-delivery/templates/`

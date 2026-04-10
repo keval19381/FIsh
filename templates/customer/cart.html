@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block title %}Shopping Cart — FishDelivery{% endblock %}
+{% block content %}
+<div class="container page">
+  <div class="page-header">
+    <div class="page-title">🛒 Your Shopping Cart</div>
+    <div class="page-subtitle">Review your items before checkout</div>
+  </div>
+
+  {% if items %}
+  <div class="cart-items">
+    {% for item in items %}
+    <div class="cart-item">
+      <div class="cart-item-image">
+        {% if item.image_path %}
+        <img src="{{ url_for('static', filename=item.image_path) }}" alt="{{ item.name }}">
+        {% else %}
+        <div class="cart-item-placeholder">🐟</div>
+        {% endif %}
+      </div>
+      <div class="cart-item-details">
+        <h3>{{ item.name }}</h3>
+        <p class="cart-item-price">₹{{ "%.2f"|format(item.price) }} per kg</p>
+      </div>
+      <div class="cart-item-quantity">
+        <form method="POST" action="{{ url_for('update_cart', fish_id=item.id) }}" style="display:flex; align-items:center; gap:0.5rem;">
+          <button type="button" class="qty-btn" onclick="changeQty(this, -1)">−</button>
+          <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="qty-input" onchange="this.form.submit()">
+          <button type="button" class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </form>
+      </div>
+      <div class="cart-item-subtotal">
+        <p>₹{{ "%.2f"|format(item.subtotal) }}</p>
+      </div>
+      <div class="cart-item-actions">
+        <a href="{{ url_for('remove_from_cart', fish_id=item.id) }}" class="btn btn-ghost btn-sm">Remove</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="cart-summary">
+    <div class="cart-total">
+      <strong>Total: ₹{{ "%.2f"|format(total) }}</strong>
+    </div>
+    <div class="cart-actions">
+      <a href="{{ url_for('customer_browse') }}" class="btn btn-ghost">Continue Shopping</a>
+      <a href="{{ url_for('checkout') }}" class="btn btn-primary">Proceed to Checkout</a>
+    </div>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="icon">🛒</div>
+    <h3>Your cart is empty</h3>
+    <p>Add some fresh fish to get started!</p>
+    <a href="{{ url_for('customer_browse') }}" class="btn btn-primary">Browse Fish</a>
+  </div>
+  {% endif %}
+</div>
+
+<style>
+.cart-items {
+  margin-bottom: 2rem;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 80px 1fr 120px 100px 80px;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  background: #fff;
+}
+
+.cart-item-image img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.cart-item-placeholder {
+  width: 60px;
+  height: 60px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.cart-item-details h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.cart-item-price {
+  color: var(--text-muted);
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.qty-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: var(--primary);
+}
+
+.qty-input {
+  width: 50px;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.25rem;
+}
+
+.cart-item-subtotal {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.cart-summary {
+  background: #fff;
+  padding: 2rem;
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-total {
+  font-size: 1.25rem;
+}
+
+.cart-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .cart-item {
+    grid-template-columns: 60px 1fr;
+    grid-template-rows: auto auto;
+  }
+  
+  .cart-item-quantity, .cart-item-subtotal, .cart-item-actions {
+    grid-column: 2;
+  }
+  
+  .cart-summary {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+</style>
+
+<script>
+function changeQty(btn, delta) {
+  const input = btn.parentElement.querySelector('.qty-input');
+  let qty = parseInt(input.value) + delta;
+  if (qty < 1) qty = 1;
+  input.value = qty;
+  input.form.submit();
+}
+</script>
+{% endblock %}

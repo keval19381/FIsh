@@ -1,2 +1,6 @@
-Flask>=3.0.0
-Werkzeug>=3.0.0
+Flask
+gunicorn
+razorpay
+Flask-Mail
+python-dotenv
+supabase
