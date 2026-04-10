@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Delivery Dashboard — AquaBasket{% endblock %}
+{% block content %}
+<div class="container page">
+  <!-- Welcome Banner -->
+  <div class="card" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; margin-bottom: 2rem; padding: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">Welcome, {{ session.user_name }}! 🚚</div>
+        <div style="opacity: 0.9;">Track your deliveries, update orders, and complete your tasks</div>
+      </div>
+      <a href="{{ url_for('delivery_orders') }}" class="btn btn-primary" style="background: white; color: #f97316; font-weight: 700;">
+        📦 View Orders
+      </a>
+    </div>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="stats-grid" style="margin-bottom: 2rem;">
+    <div class="stat-card">
+      <div class="stat-num" style="font-size: 2.5rem;">{{ total_assigned }}</div>
+      <div class="stat-label">Assigned Orders</div>
+      <div class="stat-detail" style="color: #f97316; font-size: 0.85rem; margin-top: 0.5rem;">All time</div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-num" style="font-size: 2.5rem;">{{ active_orders }}</div>
+      <div class="stat-label">In Progress</div>
+      <div class="stat-detail" style="color: #ff9500; font-size: 0.85rem; margin-top: 0.5rem;">Pending & preparing</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-num" style="font-size: 2.5rem;">{{ completed_orders }}</div>
+      <div class="stat-label">Completed</div>
+      <div class="stat-detail" style="color: #10b981; font-size: 0.85rem; margin-top: 0.5rem;">Successfully delivered</div>
+    </div>
+    <div class="stat-card purple">
+      <div class="stat-num" style="font-size: 2.5rem;">{{ pending_assignments }}</div>
+      <div class="stat-label">Awaiting Assignment</div>
+      <div class="stat-detail" style="color: #a855f7; font-size: 0.85rem; margin-top: 0.5rem;">Available orders</div>
+    </div>
+  </div>
+
+  <!-- Quick Action Buttons -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+    <a href="{{ url_for('delivery_orders') }}" class="action-btn" style="padding: 1.5rem; border: 2px solid #f97316; border-radius: 0.75rem; text-align: center; text-decoration: none; color: #f97316; font-weight: 600; transition: all 0.3s;">
+      <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📦</div>
+      My Deliveries
+    </a>
+    <a href="{{ url_for('delivery_orders', status='out_for_delivery') }}" class="action-btn" style="padding: 1.5rem; border: 2px solid #3b82f6; border-radius: 0.75rem; text-align: center; text-decoration: none; color: #3b82f6; font-weight: 600; transition: all 0.3s;">
+      <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🚚</div>
+      Out for Delivery
+    </a>
+    <a href="{{ url_for('delivery_orders', status='delivered') }}" class="action-btn" style="padding: 1.5rem; border: 2px solid #10b981; border-radius: 0.75rem; text-align: center; text-decoration: none; color: #10b981; font-weight: 600; transition: all 0.3s;">
+      <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">✅</div>
+      Completed
+    </a>
+    <a href="/auth/logout" class="action-btn" style="padding: 1.5rem; border: 2px solid #ef4444; border-radius: 0.75rem; text-align: center; text-decoration: none; color: #ef4444; font-weight: 600; transition: all 0.3s;">
+      <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🚪</div>
+      Logout
+    </a>
+  </div>
+
+  <!-- Professional Info -->
+  <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 2rem;">
+    <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+      <h2 style="font-size: 1.1rem; font-weight: 700; color: var(--primary-dark);">👤 Your Profile</h2>
+    </div>
+    <div style="padding: 1.5rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        <div>
+          <div style="color: #6b7280; font-size: 0.9rem; margin-bottom: 0.5rem;">Delivery Partner Name</div>
+          <div style="font-size: 1.25rem; font-weight: 700; color: var(--primary-dark);">{{ session.user_name }}</div>
+          <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 0.25rem;">Professional partner</div>
+        </div>
+        <div>
+          <div style="color: #6b7280; font-size: 0.9rem; margin-bottom: 0.5rem;">Email Address</div>
+          <div style="font-size: 1.25rem; font-weight: 700; color: var(--primary-dark);">{{ session.user_email }}</div>
+          <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 0.25rem;">Verified ✅</div>
+        </div>
+        <div>
+          <div style="color: #6b7280; font-size: 0.9rem; margin-bottom: 0.5rem;">Status</div>
+          <div style="font-size: 1.25rem; font-weight: 700; color: var(--primary-dark);">🟢 Active</div>
+          <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 0.25rem;">Ready to accept orders</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Status Legend -->
+  <div class="card" style="padding: 1.5rem;">
+    <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: #f97316;">📋 Order Status Guide</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+      <div style="padding: 1rem; background: #fef3c7; border-radius: 0.5rem;">
+        <div style="color: #92400e; font-weight: 600;">⏳ Pending</div>
+        <div style="color: #b45309; font-size: 0.85rem; margin-top: 0.25rem;">Waiting to be prepared</div>
+      </div>
+      <div style="padding: 1rem; background: #fce7f3; border-radius: 0.5rem;">
+        <div style="color: #831843; font-weight: 600;">🔪 Preparing</div>
+        <div style="color: #be185d; font-size: 0.85rem; margin-top: 0.25rem;">Being packaged</div>
+      </div>
+      <div style="padding: 1rem; background: #dbeafe; border-radius: 0.5rem;">
+        <div style="color: #082f49; font-weight: 600;">🚚 Out for Delivery</div>
+        <div style="color: #0369a1; font-size: 0.85rem; margin-top: 0.25rem;">On the way</div>
+      </div>
+      <div style="padding: 1rem; background: #dcfce7; border-radius: 0.5rem;">
+        <div style="color: #166534; font-weight: 600;">✅ Delivered</div>
+        <div style="color: #16a34a; font-size: 0.85rem; margin-top: 0.25rem;">Completed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Performance Tips -->
+  <div class="card" style="padding: 1.5rem; margin-top: 1.5rem; border-left: 4px solid #f97316;">
+    <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; color: #f97316;">🏆 Tips to Increase Your Rating</h3>
+    <ul style="margin: 0; padding-left: 1.25rem; color: #4b5563; font-size: 0.95rem; line-height: 1.6;">
+      <li>Update order status promptly as you make progress</li>
+      <li>Deliver within the estimated time window</li>
+      <li>Keep customers informed via status updates</li>
+      <li>Handle packages with care</li>
+      <li>Build a track record of on-time, complete deliveries</li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  .action-btn:hover {
+    background-color: rgba(249, 115, 22, 0.1);
+  }
+</style>
+{% endblock %}
