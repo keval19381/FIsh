@@ -46,6 +46,15 @@ CREATE TABLE IF NOT EXISTS orders (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc', now())
 );
 
+CREATE TABLE IF NOT EXISTS fish_items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL,
+    price INTEGER NOT NULL,
+    description TEXT DEFAULT '',
+    image_url TEXT DEFAULT '',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc', now())
+);
+
 -- ── Row Level Security (RLS) Policies ───────────────────────────────────────
 -- IMPORTANT: The app uses the anon key with server-side auth (Flask sessions),
 -- so we are temporarily disabling RLS for development to prevent permission errors.
@@ -53,6 +62,7 @@ CREATE TABLE IF NOT EXISTS orders (
 ALTER TABLE users DISABLE ROW LEVEL SECURITY;
 ALTER TABLE fish DISABLE ROW LEVEL SECURITY;
 ALTER TABLE orders DISABLE ROW LEVEL SECURITY;
+ALTER TABLE fish_items DISABLE ROW LEVEL SECURITY;
 
 -- ── Default Admin User ──────────────────────────────────────────────────────
 -- Password: admin123 (SHA-256 hash)

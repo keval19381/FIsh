@@ -84,6 +84,31 @@ except Exception as e:
     print(f"ERROR: Supabase initialization failed: {e}")
     exit(1)
 
+# ── Auto-Insert Demo Fish Data ─────────────────────────────────────────────
+# This runs once at startup to ensure demo data exists for recording/demo purposes
+def insert_demo_fish_if_empty():
+    try:
+        # Check if fish_items table is empty
+        result = supabase.table("fish_items").select("id", count="exact").execute()
+        
+        if result.count == 0:
+            # Table is empty, insert demo fish
+            demo_fish = {
+                "name": "Fresh Rohu Fish",
+                "price": 299,
+                "description": "Freshly caught Rohu fish, cleaned and ready to cook.",
+                "image_url": "https://www.dreamstime.com/photos-images/rui-fish.html"
+            }
+            supabase.table("fish_items").insert(demo_fish).execute()
+            print("✓ Demo fish added to database")
+        else:
+            print(f"Fish items table already contains {result.count} item(s). Skipping demo insert.")
+    except Exception as e:
+        print(f"! Warning: Could not insert demo fish data: {e}")
+
+# Call demo insert on startup
+insert_demo_fish_if_empty()
+
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024  # 5MB
 
@@ -207,6 +232,19 @@ def index():
         order_count=order_count,
         seller_count=seller_count,
     )
+
+
+@app.route("/fish")
+def fish_demo():
+    """Display demo fish items for recording purposes."""
+    try:
+        result = supabase.table("fish_items").select("*").execute()
+        fish_items = result.data if result.data else []
+    except Exception as e:
+        app.logger.error(f"Error fetching fish items: {e}")
+        fish_items = []
+    
+    return render_template("fish.html", fish_items=fish_items)
 
 
 # ── Auth ─────────────────────────────────────────────────────────────────────

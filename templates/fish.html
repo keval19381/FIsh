@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Demo Fish - AquaBasket{% endblock %}
+
+{% block head %}
+<style>
+  .fish-container {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 20px;
+  }
+
+  .fish-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .fish-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .fish-image-container {
+    width: 100%;
+    height: 300px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .fish-image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+  }
+
+  .fish-image-placeholder {
+    font-size: 80px;
+    opacity: 0.8;
+  }
+
+  .fish-content {
+    padding: 24px;
+  }
+
+  .fish-name {
+    font-family: "Playfair Display", serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0 0 12px 0;
+  }
+
+  .fish-price {
+    font-size: 28px;
+    font-weight: 700;
+    color: #667eea;
+    margin: 12px 0;
+  }
+
+  .fish-price::before {
+    content: "₹ ";
+  }
+
+  .fish-description {
+    color: #4a5568;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 16px 0;
+  }
+
+  .fish-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .btn-order {
+    flex: 1;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-order:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #718096;
+  }
+
+  .empty-state-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+  }
+
+  .page-title {
+    text-align: center;
+    font-family: "Playfair Display", serif;
+    font-size: 32px;
+    color: #1a202c;
+    margin-bottom: 40px;
+    font-weight: 700;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="fish-container">
+  <h1 class="page-title">🐟 Fresh Fish Selection</h1>
+
+  {% if fish_items %}
+    {% for fish in fish_items %}
+    <div class="fish-card">
+      <div class="fish-image-container">
+        {% if fish.image_url %}
+          <img src="{{ fish.image_url }}" alt="{{ fish.name }}" />
+        {% else %}
+          <span class="fish-image-placeholder">🐠</span>
+        {% endif %}
+      </div>
+      <div class="fish-content">
+        <h2 class="fish-name">{{ fish.name }}</h2>
+        <p class="fish-price">{{ fish.price }}</p>
+        <p class="fish-description">{{ fish.description }}</p>
+        <div class="fish-actions">
+          <button class="btn-order">Order Now</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-state-icon">🐟</div>
+      <h2>No Fish Available</h2>
+      <p>Check back soon for fresh fish!</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
